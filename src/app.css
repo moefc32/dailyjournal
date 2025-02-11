@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@import '@fontsource-variable/dm-sans';
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+body {
+    font-family: 'DM Sans Variable', sans-serif;
+}
