@@ -10,7 +10,6 @@ export async function POST({ cookies, request }) {
     const title = formData.get('title');
     const content = formData.get('content');
     const files = formData.getAll('files[]');
-    const uploadedFiles = [];
 
     const access_token = cookies.get('access_token');
     const decoded_token = await decodeToken(access_token);
@@ -29,20 +28,25 @@ export async function POST({ cookies, request }) {
             data: {
                 title,
                 content,
-                userId: decoded_token?.id
+                userId: decoded_token?.id,
             },
             select: { id: true },
         });
 
-        for (const file of files) {
-            const newFile = await prisma.documentations.create({
-                data: { journalId: query.id },
-                select: { id: true },
-            });
+        const uploadedFiles = await Promise.all(
+            files.map(async (file, i) => {
+                const newFile = await prisma.documentations.create({
+                    data: {
+                        journalId: query.id,
+                        order: i + 1,
+                    },
+                    select: { id: true },
+                });
 
-            await uploadMinio(file, '', newFile.id);
-            uploadedFiles.push(newFile.id);
-        }
+                await uploadMinio(file, '', newFile.id);
+                return newFile.id;
+            })
+        );
 
         return json({
             application: VITE_APP_NAME,

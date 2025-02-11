@@ -39,7 +39,7 @@
       notyf.success("Journal created successfully.");
       setTimeout(() => {
         window.location.href = `/${result.data.id}`;
-      }, 3000);
+      }, 2000);
     } catch (e) {
       journal.loading = false;
 

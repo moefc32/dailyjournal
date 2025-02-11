@@ -23,7 +23,7 @@
       notyf.success("Journal deleted successfully.");
       setTimeout(() => {
         window.location.href = "/";
-      }, 3000);
+      }, 2000);
     } catch (e) {
       console.error(e);
       notyf.error("Delete journal failed, please try again!");
@@ -60,21 +60,28 @@
           {datePrettier(contents.createdAt)}
         </div>
       </div>
-      <div class="flex gap-3 overflow-y-auto">
-        {#each contents.documentations as file, i}
-          <div
-            class="relative bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden"
-          >
-            <img
-              src={`/file/${file}`}
-              class="object-cover w-full h-full"
-              alt="Upload preview"
-            />
-          </div>
-        {/each}
-      </div>
-      <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
+      {#if contents.documentations.length}
+        <div class="flex gap-3 overflow-y-auto">
+          {#each contents.documentations as file, i}
+            <div
+              class="relative bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden"
+            >
+              <img
+                src={`/file/${file}`}
+                class="object-cover w-full h-full"
+                alt="Upload preview"
+              />
+            </div>
+          {/each}
+        </div>
+        <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
+      {/if}
       <div>{contents.content}</div>
+      {#if contents.updatedAt}
+        <div class="text-gray-500 text-sm">
+          Updated at {datePrettier(contents.updatedAt)}
+        </div>
+      {/if}
     {/if}
   </div>
 </div>

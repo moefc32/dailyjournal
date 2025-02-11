@@ -142,10 +142,7 @@
       <button
         class="btn bg-emerald-600 self-start text-white mt-2"
         title="Submit new journal"
-        disabled={!journal.title ||
-          !journal.content ||
-          !journal.files.length ||
-          journal.loading}
+        disabled={!journal.title || !journal.content || journal.loading}
         on:click={() => submitJournal()}
       >
         Submit

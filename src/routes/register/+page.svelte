@@ -36,7 +36,7 @@
 
       setTimeout(() => {
         window.location.href = "/";
-      }, 3000);
+      }, 2000);
     } catch (e) {
       register.loading = false;
 

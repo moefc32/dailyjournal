@@ -5,6 +5,8 @@ import prisma from '$lib/server/prisma';
 export async function load({ parent }) {
     const { userData } = await parent();
 
+    if (!userData) return;
+
     const [row, total] = await Promise.all([
         prisma.journals.findMany({
             where: { userId: userData.id },

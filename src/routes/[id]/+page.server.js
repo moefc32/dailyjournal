@@ -10,11 +10,12 @@ export async function load({ params, parent }) {
         include: {
             documentations: {
                 select: { id: true },
+                orderBy: { order: 'asc' },
             },
         },
     });
 
-    if (contents) {
+    if (contents?.documentations) {
         contents.documentations =
             contents.documentations.map((item) => item.id);
     }
