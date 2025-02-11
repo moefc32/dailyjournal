@@ -1,5 +1,5 @@
 <script>
-  import Editor from "$lib/component/Editor.svelte";
+  import Page from "$lib/component/Page.svelte";
 
   export let data;
 
@@ -7,5 +7,5 @@
 </script>
 
 <main class="flex flex-col gap-6 w-full">
-  <Editor />
+  <Page {contents} />
 </main>

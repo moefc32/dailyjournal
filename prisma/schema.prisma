@@ -1,30 +1,38 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model Users {
-  id       String @id @default(uuid()) @db.Char(36)
-  name     String
-  email    String @unique
-  password String
+    id       String @id @default(uuid()) @db.Char(36)
+    name     String
+    email    String @unique
+    password String
 
-  journals Journals[]
+    journals Journals[]
 }
 
 model Journals {
-  id        String   @id @default(uuid()) @db.Char(36)
-  title     String
-  content   String   @db.Text
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  usersId   String   @db.Char(36)
+    id        String   @id @default(uuid()) @db.Char(36)
+    title     String
+    content   String   @db.Text
+    usersId   String   @db.Char(36)
+    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
 
-  user Users @relation(fields: [usersId], references: [id])
+    documentations Documentations[]
+    user           Users            @relation(fields: [usersId], references: [id])
 
-  @@index([title])
+    @@index([title])
+}
+
+model Documentations {
+    id        String @id @default(uuid()) @db.Char(36)
+    journalId String @db.Char(36)
+
+    journal Journals @relation(fields: [journalId], references: [id])
 }

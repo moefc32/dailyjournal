@@ -4,7 +4,6 @@
   import { Toasts } from "svoast";
 
   import Header from "$lib/component/Header.svelte";
-  import Footer from "$lib/component/Footer.svelte";
 
   const noPageTitleRoutes = ["/"];
 
@@ -23,6 +22,5 @@
 {:else}
   <Header />
   <slot />
-  <Footer />
   <Toasts />
 {/if}
