@@ -1,12 +1,14 @@
 <script>
   import { onMount } from "svelte";
-  import { ArrowLeft, Pen, Trash2 } from "lucide-svelte";
+  import { ArrowLeft, Pen, Trash2, X } from "lucide-svelte";
   import { Notyf } from "notyf";
   import datePrettier from "$lib/datePrettier";
 
   let notyf;
 
   export let contents;
+
+  let previewImage = "";
 
   async function deleteJournal(id) {
     try {
@@ -63,15 +65,19 @@
       {#if contents.documentations.length}
         <div class="flex gap-3 overflow-y-auto">
           {#each contents.documentations as file, i}
-            <div
-              class="relative bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden"
+            <button
+              class="block bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden cursor-pointer"
+              on:click={() => {
+                previewImage = `/file/${file}`;
+                journal_preview.showModal();
+              }}
             >
               <img
                 src={`/file/${file}`}
                 class="object-cover w-full h-full"
                 alt="Upload preview"
               />
-            </div>
+            </button>
           {/each}
         </div>
         <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
@@ -85,6 +91,24 @@
     {/if}
   </div>
 </div>
+
+<dialog id="journal_preview" class="modal modal-bottom sm:modal-middle">
+  <div class="flex justify-center items-center p-12 w-screen h-screen">
+    <form method="dialog">
+      <button
+        class="btn btn-sm btn-circle absolute right-6 top-6"
+        title="Close preview"
+      >
+        <X size={24} />
+      </button>
+    </form>
+    <img
+      src={previewImage}
+      class="max-w-full max-h-full rounded"
+      alt="Documentation"
+    />
+  </div>
+</dialog>
 
 <dialog id="journal_delete" class="modal modal-bottom sm:modal-middle">
   <div class="modal-box">
