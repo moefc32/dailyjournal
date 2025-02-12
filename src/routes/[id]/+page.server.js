@@ -7,11 +7,21 @@ export async function load({ params, parent }) {
 
     const contents = await prisma.journals.findUnique({
         where: { id },
-        include: { documentations: true },
+        include: {
+            documentations: {
+                select: { id: true },
+            },
+        },
     });
+
+    if (contents) {
+        contents.documentations =
+            contents.documentations.map((item) => item.id);
+    }
 
     return {
         pageTitle,
+        userData,
         contents,
     };
 }

@@ -1,16 +1,18 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import { decodeToken } from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 import { hashPassword } from '$lib/server/hash';
 import isValidEmail from '$lib/isValidEmail';
 
-export async function PATCH({ url, request }) {
+export async function PATCH({ cookies, url, request }) {
     const id = url.searchParams.get('id');
     const {
         name = '',
         email = '',
         password = '',
     } = await request.json() || {};
+
     const access_token = cookies.get('access_token');
     const decoded_token = await decodeToken(access_token);
 

@@ -1,5 +1,5 @@
 <script>
-  import { Eye, EyeOff, LogIn } from "lucide-svelte";
+  import { Eye, EyeOff, Check } from "lucide-svelte";
   import isValidEmail from "$lib/isValidEmail";
 
   export let register;
@@ -8,20 +8,25 @@
   let showPassword = false;
 
   async function handleKeydown(event) {
-    if (event.key === "Enter" && register.email && register.password) {
+    if (
+      event.key === "Enter" &&
+      register.name &&
+      register.email &&
+      register.password
+    ) {
       doRegister();
     }
   }
 </script>
 
 <div
-  class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-2xl"
+  class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-xl"
 >
   <h1 class="my-2 text-3xl text-center">{import.meta.env.VITE_APP_NAME}</h1>
   <input
     type="text"
     class="input input-bordered w-full"
-    placeholder="Name"
+    placeholder="User name"
     bind:value={register.name}
     on:keydown={handleKeydown}
   />
@@ -66,9 +71,9 @@
     {/if}
   </label>
   <button
-    class="btn bg-blue-700 text-white mt-2"
+    class="btn bg-emerald-600 text-white mt-2"
     title="Register new user account"
-    disabled={!register.email ||
+    disabled={(!register.name && !register.email) ||
       !isValidEmail(register.email) ||
       !register.password ||
       register.loading}
@@ -77,7 +82,11 @@
     {#if register.loading}
       <span class="loading loading-spinner loading-xs"></span> Loading...
     {:else}
-      <LogIn size={16} /> Register
+      <Check size={16} /> Register
     {/if}
   </button>
+  <div class="text-gray-500 text-sm text-center">
+    Already have an account?
+    <a href="/login" class="text-emerald-700">Login</a>
+  </div>
 </div>

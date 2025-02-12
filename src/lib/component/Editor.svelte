@@ -1,27 +1,48 @@
 <script>
   import { onMount } from "svelte";
+  import { X } from "lucide-svelte";
+  import datePrettier from "$lib/datePrettier";
 
-  let files = [];
+  export let journal;
+  export let submitJournal;
+
   let fileInput;
+  let currentTime = "";
+  let dragging = false;
 
   function handleDrop(event) {
     event.preventDefault();
+    dragging = false;
+
     const droppedFiles = Array.from(event.dataTransfer.files);
     processFiles(droppedFiles);
   }
 
+  function handleDragEnter() {
+    dragging = true;
+  }
+
+  function handleDragLeave() {
+    dragging = false;
+  }
+
   function handleFileSelect(event) {
-    const selectedFiles = Array.from(event.target.files);
+    let selectedFiles = Array.from(event.target.files);
+
+    if (journal.files.length + selectedFiles.length > 10) {
+      selectedFiles = selectedFiles.slice(0, 10 - journal.files.length);
+    }
+
     processFiles(selectedFiles);
   }
 
   function processFiles(newFiles) {
     newFiles = newFiles.filter((file) => file.type.startsWith("image/"));
-    files = [...files, ...newFiles];
+    journal.files = [...journal.files, ...newFiles];
   }
 
   function removeFile(index) {
-    files = files.filter((_, i) => i !== index);
+    journal.files = journal.files.filter((_, i) => i !== index);
   }
 
   function preventDefaults(event) {
@@ -35,90 +56,95 @@
   onMount(() => {
     document.addEventListener("dragover", preventDefaults);
     document.addEventListener("drop", preventDefaults);
+
+    function updateClock() {
+      currentTime = datePrettier(Date.now(), true, false);
+    }
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+
+    return () => clearInterval(interval);
   });
 </script>
 
-<div class="card flex flex-col gap-6 p-6 w-full">
-  <button
-    class="drop-zone"
-    on:click={openFileDialog}
-    on:drop={handleDrop}
-    on:dragover={preventDefaults}
-  >
-    <p>Drag & Drop images here or click to select</p>
-  </button>
-  <input
-    type="file"
-    accept="image/*"
-    multiple
-    bind:this={fileInput}
-    on:change={handleFileSelect}
-    hidden
-  />
-  <div class="previews">
-    {#each files as file, index}
-      <div class="preview">
-        <img src={URL.createObjectURL(file)} alt="Preview" />
-        <button class="remove-btn" on:click={() => removeFile(index)}>×</button>
-      </div>
-    {/each}
+<div
+  class="card flex flex-col gap-6 p-6 bg-white w-full max-w-screen-sm shadow-xl"
+>
+  <div class="flex flex-col gap-3">
+    <input
+      type="text"
+      class="input input-lg input-bordered w-full"
+      placeholder="Journal title"
+      bind:value={journal.title}
+    />
+    <div class="text-gray-500 text-sm">
+      {currentTime}
+    </div>
   </div>
-  <textarea
-    class="textarea w-full resize-none"
-    placeholder="Activity description"
-  ></textarea>
+  {#if journal.files.length < 10}
+    <button
+      class="card block p-9 {dragging &&
+        'bg-gray-100'} text-center border-2 border-dashed border-gray-300 hover:border-gray-500 transition duration-300 ease-in-out cursor-pointer"
+      on:click={openFileDialog}
+      on:drop={handleDrop}
+      on:dragover={preventDefaults}
+      on:dragenter={handleDragEnter}
+      on:dragleave={handleDragLeave}
+    >
+      {#if dragging}
+        Drop your image(s) here
+      {:else}
+        Drag & drop image(s) here or click to select
+      {/if}
+    </button>
+  {/if}
+  {#if journal.files.length}
+    <div class="flex gap-3 overflow-y-auto">
+      {#each journal.files as file, i}
+        <div
+          class="relative bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden"
+        >
+          <button
+            class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-none rounded-full cursor-pointer top-1 right-1 shadow"
+            on:click={() => removeFile(i)}
+          >
+            <X size={12} />
+          </button>
+          <img
+            src={URL.createObjectURL(file)}
+            class="object-cover w-full h-full"
+            alt="Upload preview"
+          />
+        </div>
+      {/each}
+    </div>
+  {/if}
+  <div class="flex flex-col gap-2">
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      class="hidden"
+      bind:this={fileInput}
+      on:change={handleFileSelect}
+    />
+    <textarea
+      class="textarea w-full resize-none"
+      placeholder="Activity description"
+      rows="5"
+      bind:value={journal.content}
+    ></textarea>
+    <button
+      class="btn bg-emerald-600 self-start text-white mt-2"
+      title="Submit new journal"
+      disabled={!journal.title ||
+        !journal.content ||
+        !journal.files.length ||
+        journal.loading}
+      on:click={() => submitJournal()}
+    >
+      Submit
+    </button>
+  </div>
 </div>
-
-<style>
-  .drop-zone {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: border 0.3s ease;
-  }
-
-  .drop-zone:hover {
-    border-color: #666;
-  }
-
-  .previews {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
-
-  .preview {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #f5f5f5;
-  }
-
-  .preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-  }
-</style>

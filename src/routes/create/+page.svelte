@@ -1,11 +1,56 @@
 <script>
+  import { onMount } from "svelte";
+  import { Notyf } from "notyf";
+
   import Editor from "$lib/component/Editor.svelte";
 
-  export let data;
+  let notyf;
 
-  let { contents } = data;
+  let journal = {
+    title: "",
+    content: "",
+    files: [],
+    loading: false,
+  };
+
+  async function submitJournal() {
+    journal.loading = true;
+
+    try {
+      const formData = new FormData();
+      formData.append("title", journal.title);
+      formData.append("content", journal.content);
+      journal.files.forEach((file) => {
+        formData.append(`files[]`, file);
+      });
+
+      const response = await fetch("/create", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error();
+
+      const result = await response.json();
+
+      notyf.success("Journal created successfully.");
+      window.location.href = `/${result.data.id}`;
+    } catch (e) {
+      journal.loading = false;
+
+      console.error(e);
+      notyf.error("Create data failed, please try again!");
+    }
+  }
+
+  onMount(async () => {
+    notyf = new Notyf();
+  });
 </script>
 
-<main class="flex flex-col gap-6 w-full">
-  <Editor />
+<main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">
+  <Editor {journal} {submitJournal} />
 </main>

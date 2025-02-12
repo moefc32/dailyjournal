@@ -1,5 +1,5 @@
 import { VITE_APP_NAME } from '$env/static/private';
-import { json, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { validateToken } from '$lib/server/token';
 
 export const handle = async ({ event, resolve }) => {
@@ -13,14 +13,15 @@ export const handle = async ({ event, resolve }) => {
     }
 
     const authPaths = ['/login', '/register'];
+    const isJson = event.request.headers
+        .get('accept')
+        ?.includes('application/json');
 
-    if (authPaths.some(path => currentPath.startsWith(path))) {
-        if (isTokenValid) {
-            throw redirect(303, '/');
-        }
-
-        return await resolve(event);
+    if (authPaths.some((path) => currentPath.startsWith(path))) {
+        if (!isJson && isTokenValid) throw redirect(303, '/');
+    } else {
+        if (!isTokenValid) throw redirect(303, '/login');
     }
 
-    throw redirect(303, '/login');
+    return await resolve(event);
 }

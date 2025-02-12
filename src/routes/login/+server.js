@@ -52,7 +52,7 @@ export async function POST({ cookies, request }) {
 
         if (passwordMatch) {
             const token = await jwt.sign({ id: lookData.id },
-                VITE_JWT_SECRET, { expiresIn: JWT_EXPIRATION ?? '1h' });
+                VITE_JWT_SECRET, { expiresIn: VITE_JWT_EXPIRATION ?? '1h' });
 
             const maxAge = parseMs(VITE_JWT_EXPIRATION ?? '1h');
             cookies.set('access_token', token, {

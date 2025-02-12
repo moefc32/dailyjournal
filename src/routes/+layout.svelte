@@ -1,7 +1,7 @@
 <script>
   import "../app.css";
+  import "notyf/notyf.min.css";
   import { page } from "$app/stores";
-  import { Toasts } from "svoast";
 
   import Header from "$lib/component/Header.svelte";
 
@@ -12,7 +12,7 @@
 
 <svelte:head>
   <title>
-    {$page.data.page_title && $page.data.page_title + " | "}
+    {$page.data.pageTitle && $page.data.pageTitle + " | "}
     {import.meta.env.VITE_APP_NAME}
   </title>
 </svelte:head>
@@ -20,7 +20,8 @@
 {#if !isValidStatusCode}
   <slot />
 {:else}
-  <Header />
-  <slot />
-  <Toasts />
+  <div class="flex flex-1 flex-col pt-[60px] w-full">
+    <Header />
+    <slot />
+  </div>
 {/if}

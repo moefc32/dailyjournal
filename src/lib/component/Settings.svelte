@@ -4,24 +4,33 @@
 
   import Avatar from "./Avatar.svelte";
 
-  export let config;
-  export let saveConfig;
+  export let settings;
+  export let saveSettings;
 
   let showPassword = false;
 
   async function handleKeydown(event) {
-    if (event.key === "Enter" && config.email && config.password) {
-      saveConfig();
+    if (event.key === "Enter" && settings.email && settings.password) {
+      saveSettings();
     }
   }
 </script>
 
-<div class="flex flex-col gap-2 w-full max-w-screen-md">
+<div
+  class="card flex flex-col gap-2 p-6 bg-white w-full max-w-screen-sm shadow-xl"
+>
+  <input
+    type="text"
+    class="input input-bordered w-full"
+    placeholder="New user name"
+    bind:value={settings.name}
+    on:keydown={handleKeydown}
+  />
   <input
     type="email"
     class="input input-bordered w-full"
     placeholder="New email"
-    bind:value={config.email}
+    bind:value={settings.email}
     on:keydown={handleKeydown}
   />
   <label class="input input-bordered flex items-center gap-2 w-full">
@@ -30,7 +39,7 @@
         type="password"
         class="grow"
         placeholder="New password"
-        bind:value={config.password}
+        bind:value={settings.password}
         on:keydown={handleKeydown}
       />
       <button
@@ -45,7 +54,7 @@
         type="text"
         class="grow"
         placeholder="New password"
-        bind:value={config.password}
+        bind:value={settings.password}
         on:keydown={handleKeydown}
       />
       <button
@@ -57,27 +66,15 @@
       </button>
     {/if}
   </label>
-  <input
-    type="text"
-    class="input input-bordered w-full"
-    placeholder="Notion API key"
-    bind:value={config.notion_key}
-    on:keydown={handleKeydown}
-  />
-  <input
-    type="text"
-    class="input input-bordered w-full"
-    placeholder="Notion database ID"
-    bind:value={config.notion_db}
-    on:keydown={handleKeydown}
-  />
   <button
-    class="btn bg-blue-700 self-start text-white mt-2"
-    title="Save configurations"
-    disabled={!config.email || !isValidEmail(config.email) || config.loading}
-    on:click={() => saveConfig()}
+    class="btn bg-emerald-600 self-start text-white mt-2"
+    title="Save account data"
+    disabled={!settings.email ||
+      !isValidEmail(settings.email) ||
+      settings.loading}
+    on:click={() => saveSettings()}
   >
-    {#if config.loading}
+    {#if settings.loading}
       <span class="loading loading-spinner loading-xs"></span> Loading...
     {:else}
       <Check size={16} /> Save

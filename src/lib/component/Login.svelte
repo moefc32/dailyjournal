@@ -15,7 +15,7 @@
 </script>
 
 <div
-  class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-2xl"
+  class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-xl"
 >
   <h1 class="my-2 text-3xl text-center">{import.meta.env.VITE_APP_NAME}</h1>
   <input
@@ -59,7 +59,7 @@
     {/if}
   </label>
   <button
-    class="btn bg-blue-700 text-white mt-2"
+    class="btn bg-emerald-600 text-white mt-2"
     title="Login to application"
     disabled={!login.email ||
       !isValidEmail(login.email) ||
@@ -73,4 +73,8 @@
       <LogIn size={16} /> Login
     {/if}
   </button>
+  <div class="text-gray-500 text-sm text-center">
+    Don't have an account?
+    <a href="/register" class="text-emerald-700">Register</a>
+  </div>
 </div>

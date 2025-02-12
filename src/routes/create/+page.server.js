@@ -4,5 +4,6 @@ export async function load({ parent }) {
 
     return {
         pageTitle,
+        userData,
     };
 }

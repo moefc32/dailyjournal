@@ -21,9 +21,11 @@ export async function POST({ request }) {
 
     try {
         const query = await prisma.users.create({
-            name,
-            email,
-            password: await hashPassword(password),
+            data: {
+                name,
+                email,
+                password: await hashPassword(password),
+            },
         });
 
         return json({
