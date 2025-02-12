@@ -1,7 +1,9 @@
 <script>
-  import datePrettier from "$lib/datePrettier";
-
   import { Plus, Search } from "lucide-svelte";
+  import datePrettier from "$lib/datePrettier";
+  import trimText from "$lib/trimText";
+
+  import Pagination from "./Pagination.svelte";
 
   export let contents;
 
@@ -11,7 +13,11 @@
     loading: false,
   };
   let searchTimeout;
-  let pagination = {
+  let journalPagination = {
+    page: 1,
+    limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS) || 10,
+  };
+  let searchPagination = {
     page: 1,
     limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS) || 10,
   };
@@ -24,20 +30,46 @@
     }, 200);
   }
 
+  async function navigateJournal() {
+    try {
+      const query = new URLSearchParams({
+        ...journalPagination,
+      }).toString();
+
+      const response = await fetch("/", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error();
+
+      const result = await response.json();
+      contents.row = result.data.row;
+      contents.total = result.data.total;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   async function doSearch() {
     search.loading = true;
 
     try {
-      const response = await fetch(
-        `/?search=${search.keyword}&page=${pagination.page}&limit=${pagination.limit}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const query = new URLSearchParams({
+        search: trimText(search.keyword),
+        ...searchPagination,
+      }).toString();
+
+      const response = await fetch(`/?${query}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) throw new Error();
 
@@ -49,6 +81,10 @@
       search.loading = false;
     }
   }
+
+  $: pages = search.keyword
+    ? Math.ceil(contents.total / searchPagination.limit)
+    : Math.ceil(contents.total / journalPagination.limit);
 </script>
 
 <div class="flex items-center gap-3 w-full max-w-screen-sm">
@@ -75,7 +111,12 @@
       <span class="block text-xl font-semibold">
         {item.title}
       </span>
-      <span class="text-gray-500 text-sm">{datePrettier(item.createdAt)}</span>
+      <span class="text-gray-500 text-sm">
+        {datePrettier(item.createdAt)}
+      </span>
     </a>
   {/each}
 </div>
+{#if pages.length > 1}
+  <Pagination {pages} />
+{/if}
