@@ -31,7 +31,7 @@
       const response = await fetch(
         `/?search=${search.keyword}&page=${pagination.page}&limit=${pagination.limit}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@
 </script>
 
 <div class="flex items-center gap-3 w-full max-w-screen-sm">
-  <a href="/create" class="btn bg-emerald-600 self-start text-white">
+  <a href="/create" class="btn bg-emerald-600 text-white">
     <Plus size={16} /> Create New Journal
   </a>
   <label class="input ms-auto w-90 max-w-full">
@@ -66,11 +66,16 @@
     />
   </label>
 </div>
-{#each search.keyword ? search.results : contents.row as item, i}
-  <div
-    class="card flex flex-col gap-2 p-6 bg-white w-full max-w-screen-sm shadow-xl"
-  >
-    <a href={`/${item.id}`} class="block text-xl font-semibold">{item.title}</a>
-    <div class="text-gray-500 text-sm">{datePrettier(item.createdAt)}</div>
-  </div>
-{/each}
+<div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
+  {#each search.keyword ? search.results : contents.row as item, i}
+    <a
+      href={`/${item.id}`}
+      class="card flex flex-col gap-2 p-6 bg-white w-full shadow-xl"
+    >
+      <span class="block text-xl font-semibold">
+        {item.title}
+      </span>
+      <span class="text-gray-500 text-sm">{datePrettier(item.createdAt)}</span>
+    </a>
+  {/each}
+</div>

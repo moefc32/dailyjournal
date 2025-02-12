@@ -34,4 +34,4 @@ CREATE TABLE `Documentations` (
 ALTER TABLE `Journals` ADD CONSTRAINT `Journals_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Documentations` ADD CONSTRAINT `Documentations_journalId_fkey` FOREIGN KEY (`journalId`) REFERENCES `Journals`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Documentations` ADD CONSTRAINT `Documentations_journalId_fkey` FOREIGN KEY (`journalId`) REFERENCES `Journals`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

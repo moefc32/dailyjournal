@@ -33,9 +33,6 @@
       if (!response.ok) throw new Error();
 
       notyf.success("New user account registered successfully.");
-      register.name = "";
-      register.email = "";
-      register.password = "";
 
       setTimeout(() => {
         window.location.href = "/";

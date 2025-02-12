@@ -6,7 +6,7 @@ import { json } from '@sveltejs/kit';
 import { decodeToken } from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 
-export async function POST({ cookies, url }) {
+export async function GET({ cookies, url }) {
     const search = url.searchParams.get('search')?.trim() || undefined;
     const page = parseInt(url.searchParams.get('page')) || 1;
     const limit = parseInt(url.searchParams.get('limit'))

@@ -30,6 +30,7 @@
       });
 
       if (!response.ok) throw new Error();
+
       window.location.href = "/";
     } catch (e) {
       login.loading = false;

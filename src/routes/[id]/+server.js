@@ -1,9 +1,10 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import { deleteMinio } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
 
-export async function PATCH({ url, request }) {
-    const id = url.searchParams.get('id');
+export async function PATCH({ params, request }) {
+    const { id } = params;
     const {
         title = '',
         content = '',
@@ -36,10 +37,10 @@ export async function PATCH({ url, request }) {
     }
 }
 
-export async function DELETE({ url }) {
-    const id = url.searchParams.get('id');
+export async function DELETE({ params }) {
+    const { id } = params;
 
-    if (!email || !password) {
+    if (!id) {
         return json({
             application: VITE_APP_NAME,
             message: 'Error, id must be given!',
@@ -49,6 +50,13 @@ export async function DELETE({ url }) {
     }
 
     try {
+        const files = await prisma.documentations.findMany({
+            where: { journalId: id },
+            select: { id: true },
+        });
+
+        await Promise.all(files.map((file) => deleteMinio(file.id)));
+
         const query = await prisma.journals.delete({
             where: { id },
         });

@@ -37,12 +37,14 @@
       const result = await response.json();
 
       notyf.success("Journal created successfully.");
-      window.location.href = `/${result.data.id}`;
+      setTimeout(() => {
+        window.location.href = `/${result.data.id}`;
+      }, 3000);
     } catch (e) {
       journal.loading = false;
 
       console.error(e);
-      notyf.error("Create data failed, please try again!");
+      notyf.error("Create journal failed, please try again!");
     }
   }
 

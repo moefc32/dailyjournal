@@ -34,5 +34,5 @@ model Documentations {
     id        String @id @default(uuid()) @db.Char(36)
     journalId String @db.Char(36)
 
-    journal Journals @relation(fields: [journalId], references: [id])
+    journal Journals @relation(fields: [journalId], references: [id], onDelete: Cascade)
 }
