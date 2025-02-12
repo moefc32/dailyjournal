@@ -2,6 +2,7 @@ import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
 import { hashPassword } from '$lib/server/hash';
+import trimText from '$lib/trimText';
 
 export async function POST({ request }) {
     const {
@@ -22,8 +23,8 @@ export async function POST({ request }) {
     try {
         const query = await prisma.users.create({
             data: {
-                name,
-                email,
+                name: trimText(name),
+                email: email.toLowerCase(),
                 password: await hashPassword(password),
             },
         });

@@ -60,7 +60,7 @@
     <input
       type="search"
       class="grow"
-      placeholder="Cari..."
+      placeholder="Search..."
       bind:value={search.keyword}
       on:input={handleKeydown}
     />

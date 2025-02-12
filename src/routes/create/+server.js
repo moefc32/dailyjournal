@@ -3,12 +3,16 @@ import { json } from '@sveltejs/kit';
 import { decodeToken } from '$lib/server/token';
 import { uploadMinio } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
-import fs from 'fs';
+import sharp from 'sharp';
+import trimText from '$lib/trimText';
+
+const MAX_IMAGE_DIMENSION = 1200;
+const ALLOWED_IMAGE_TYPES = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export async function POST({ cookies, request }) {
     const formData = await request.formData();
-    const title = formData.get('title');
-    const content = formData.get('content');
+    const title = trimText(formData.get('title'));
+    const content = trimText(formData.get('content'));
     const files = formData.getAll('files[]');
 
     const access_token = cookies.get('access_token');
@@ -35,6 +39,10 @@ export async function POST({ cookies, request }) {
 
         const uploadedFiles = await Promise.all(
             files.map(async (file, i) => {
+                if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                    throw new Error(`Unsupported file type: ${file.type}`);
+                }
+
                 const newFile = await prisma.documentations.create({
                     data: {
                         journalId: query.id,
@@ -43,7 +51,25 @@ export async function POST({ cookies, request }) {
                     select: { id: true },
                 });
 
-                await uploadMinio(file, '', newFile.id);
+                const fileBuffer = Buffer.from(await file.arrayBuffer());
+                const image = sharp(fileBuffer);
+                const metadata = await image.metadata();
+
+                let optimizedBuffer = fileBuffer;
+                if (metadata.width > MAX_IMAGE_DIMENSION
+                    || metadata.height > MAX_IMAGE_DIMENSION) {
+                    optimizedBuffer = await image.resize({
+                        width: metadata.width > MAX_IMAGE_DIMENSION
+                            ? MAX_IMAGE_DIMENSION
+                            : undefined,
+                        height: metadata.height > MAX_IMAGE_DIMENSION
+                            ? MAX_IMAGE_DIMENSION
+                            : undefined,
+                        fit: 'inside',
+                    }).toBuffer();
+                }
+
+                await uploadMinio(optimizedBuffer, '', newFile.id);
                 return newFile.id;
             })
         );

@@ -25,7 +25,7 @@
       notyf.success("Journal deleted successfully.");
       setTimeout(() => {
         window.location.href = "/";
-      }, 2000);
+      }, 1500);
     } catch (e) {
       console.error(e);
       notyf.error("Delete journal failed, please try again!");
@@ -42,15 +42,17 @@
     <a href="/" class="btn btn-sm me-auto">
       <ArrowLeft size={16} /> Back to Home
     </a>
-    <button class="btn btn-sm btn-warning">
-      <Pen size={16} /> Edit
-    </button>
-    <button
-      class="btn btn-sm btn-error text-white"
-      on:click={() => journal_delete.showModal()}
-    >
-      <Trash2 size={16} /> Delete
-    </button>
+    {#if contents}
+      <button class="btn btn-sm btn-warning">
+        <Pen size={16} /> Edit
+      </button>
+      <button
+        class="btn btn-sm btn-error text-white"
+        on:click={() => journal_delete.showModal()}
+      >
+        <Trash2 size={16} /> Delete
+      </button>
+    {/if}
   </div>
   <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
     {#if !contents}
@@ -93,21 +95,16 @@
 </div>
 
 <dialog id="journal_preview" class="modal modal-bottom sm:modal-middle">
-  <div class="flex justify-center items-center p-12 w-screen h-screen">
-    <form method="dialog">
-      <button
-        class="btn btn-sm btn-circle absolute right-6 top-6"
-        title="Close preview"
-      >
-        <X size={24} />
-      </button>
-    </form>
-    <img
-      src={previewImage}
-      class="max-w-full max-h-full rounded"
-      alt="Documentation"
-    />
-  </div>
+  <form method="dialog">
+    <button class="flex justify-center items-center p-6 w-screen h-screen">
+      <img
+        src={previewImage}
+        class="max-w-full max-h-full rounded"
+        alt="Documentation"
+        on:click={(event) => event.preventDefault()}
+      />
+    </button>
+  </form>
 </dialog>
 
 <dialog id="journal_delete" class="modal modal-bottom sm:modal-middle">

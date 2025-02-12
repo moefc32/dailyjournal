@@ -20,11 +20,12 @@ export async function uploadMinio(file, directory, fileName) {
 
     try {
         const objectName = `${directory}/${fileName}`;
-        const buffer = Buffer.from(await file.arrayBuffer());
+        const buffer = Buffer.isBuffer(file) ? file : Buffer.from(await file.arrayBuffer());
+        const contentType = Buffer.isBuffer(file) ? 'application/octet-stream' : file.type;
 
         await minioClient
             .putObject(VITE_MINIO_BUCKET, objectName, buffer, {
-                'Content-Type': file.type,
+                'Content-Type': contentType,
             });
 
         return objectName;

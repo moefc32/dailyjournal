@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { ArrowLeft, X } from "lucide-svelte";
+  import { ArrowLeft, X, Check } from "lucide-svelte";
   import datePrettier from "$lib/datePrettier";
 
   export let journal;
@@ -145,7 +145,11 @@
         disabled={!journal.title || !journal.content || journal.loading}
         on:click={() => submitJournal()}
       >
-        Submit
+        {#if journal.loading}
+          <span class="loading loading-spinner loading-xs"></span> Loading...
+        {:else}
+          <Check size={16} /> Submit
+        {/if}
       </button>
     </div>
   </div>

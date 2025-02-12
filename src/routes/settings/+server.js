@@ -4,6 +4,7 @@ import { decodeToken } from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 import { hashPassword } from '$lib/server/hash';
 import isValidEmail from '$lib/isValidEmail';
+import trimText from '$lib/trimText';
 
 export async function PATCH({ cookies, url, request }) {
     const id = url.searchParams.get('id');
@@ -18,8 +19,8 @@ export async function PATCH({ cookies, url, request }) {
 
     try {
         const data = {};
-        if (name) data.name = name;
-        if (email) data.email = email;
+        if (name) data.name = trimText(name);
+        if (isValidEmail(email)) data.email = email.toLowerCase();
         if (password) data.password = await hashPassword(password);
 
         const query = await prisma.users.update({

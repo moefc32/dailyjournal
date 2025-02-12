@@ -36,7 +36,7 @@ export async function POST({ cookies, request }) {
 
     try {
         const lookData = await prisma.users.findUnique({
-            where: { email },
+            where: { email: email.toLowerCase() },
         });
 
         if (!lookData) {
