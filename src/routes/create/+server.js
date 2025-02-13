@@ -7,7 +7,7 @@ import sharp from 'sharp';
 import trimText from '$lib/trimText';
 
 const MAX_IMAGE_DIMENSION = 1200;
-const ALLOWED_IMAGE_TYPES = ['image/jpg', 'image/jpeg', 'image/png'];
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 
 export async function POST({ cookies, request }) {
     const formData = await request.formData();
