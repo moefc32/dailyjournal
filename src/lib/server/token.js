@@ -1,24 +1,22 @@
+import { VITE_JWT_SECRET } from '$env/static/private';
 import jwt from 'jsonwebtoken';
 
-export async function validateToken(cookies) {
-    if (!cookies) return false;
+export default function decodeToken(token) {
+    if (!token) return false;
 
-    const currentToken = cookies.get('access_token');
-    const payload = jwt.decode(currentToken);
-
-    if (!payload || payload.exp <= Math.floor(Date.now() / 1000)) return false;
-
-    return true;
+    const payload = jwt.decode(token);
+    return payload || false;
 }
 
-export async function decodeToken(token) {
+export function validateToken(cookies) {
+    if (!cookies) return false;
+
+    const token = cookies.get('access_token');
     if (!token) return false;
 
     try {
-        const decoded = await jwt.decode(token);
-        return decoded;
+        return jwt.verify(token, VITE_JWT_SECRET);
     } catch (e) {
-        console.error(e);
         return false;
     }
 }

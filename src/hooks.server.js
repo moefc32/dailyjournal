@@ -6,7 +6,7 @@ export const handle = async ({ event, resolve }) => {
     const currentPath = event.url.pathname;
     const cookies = event.cookies;
 
-    const isTokenValid = await validateToken(cookies);
+    const isTokenValid = validateToken(cookies);
 
     if (!isTokenValid) {
         cookies.delete('access_token', { path: '/' });

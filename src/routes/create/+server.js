@@ -1,6 +1,6 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import { decodeToken } from '$lib/server/token';
+import decodeToken from '$lib/server/token';
 import { uploadMinio } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
 import sharp from 'sharp';
@@ -16,7 +16,7 @@ export async function POST({ cookies, request }) {
     const files = formData.getAll('files[]');
 
     const access_token = cookies.get('access_token');
-    const decoded_token = await decodeToken(access_token);
+    const decoded_token = decodeToken(access_token);
 
     if (!title || !content) {
         return json({

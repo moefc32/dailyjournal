@@ -3,7 +3,7 @@ import {
     VITE_PAGINATION_ITEMS,
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import { decodeToken } from '$lib/server/token';
+import decodeToken from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 
 export async function GET({ cookies, url }) {
@@ -14,7 +14,7 @@ export async function GET({ cookies, url }) {
     const skip = (page - 1) * limit;
 
     const access_token = cookies.get('access_token');
-    const decoded_token = await decodeToken(access_token);
+    const decoded_token = decodeToken(access_token);
 
     try {
         const [row, total] = await Promise.all([
