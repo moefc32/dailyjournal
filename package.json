@@ -1,44 +1,44 @@
 {
-	"name": "dailyjournal",
-	"private": true,
-	"version": "0.0.1",
-	"type": "module",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-node": "^5.2.12",
-		"@sveltejs/kit": "^2.17.1",
-		"@sveltejs/vite-plugin-svelte": "^5.0.3",
-		"@tailwindcss/vite": "^4.0.6",
-		"daisyui": "5.0.0-beta.7",
-		"prisma": "^6.3.1",
-		"svelte": "^5.20.0",
-		"tailwindcss": "^4.0.6",
-		"vite": "^6.1.0"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@prisma/engines",
-			"bcrypt",
-			"esbuild",
-			"prisma",
-			"sharp"
-		]
-	},
-	"dependencies": {
-		"@fontsource-variable/dm-sans": "^5.1.1",
-		"@prisma/client": "6.3.1",
-		"bcrypt": "^5.1.1",
-		"dotenv": "^16.4.7",
-		"jsonwebtoken": "^9.0.2",
-		"lucide-svelte": "^0.475.0",
-		"minio": "^8.0.4",
-		"mysql2": "^3.12.0",
-		"notyf": "^3.10.0",
-		"sharp": "^0.33.5"
-	}
+    "name": "dailyjournal",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev": "vite dev",
+        "build": "vite build",
+        "preview": "vite preview",
+        "prepare": "svelte-kit sync || echo ''"
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-node": "^5.2.12",
+        "@sveltejs/kit": "^2.17.1",
+        "@sveltejs/vite-plugin-svelte": "^5.0.3",
+        "@tailwindcss/vite": "^4.0.6",
+        "daisyui": "5.0.0-beta.7",
+        "prisma": "^6.3.1",
+        "svelte": "^5.20.0",
+        "tailwindcss": "^4.0.6",
+        "vite": "^6.1.0"
+    },
+    "dependencies": {
+        "@fontsource-variable/dm-sans": "^5.1.1",
+        "@prisma/client": "6.3.1",
+        "bcrypt": "^5.1.1",
+        "dotenv": "^16.4.7",
+        "jsonwebtoken": "^9.0.2",
+        "lucide-svelte": "^0.475.0",
+        "minio": "^8.0.4",
+        "mysql2": "^3.12.0",
+        "notyf": "^3.10.0",
+        "sharp": "^0.33.5"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@prisma/engines",
+            "bcrypt",
+            "esbuild",
+            "prisma",
+            "sharp"
+        ]
+    }
 }

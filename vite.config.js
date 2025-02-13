@@ -6,15 +6,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-	plugins: [
-		sveltekit(),
-		tailwindcss(),
-	],
-	ssr: {
-		noExternal: ['lucide-svelte'],
-	},
-	server: {
-		host: process.env.VITE_IPBIND || 'localhost',
-		port: parseInt(process.env.VITE_PORT),
-	},
+    plugins: [
+        sveltekit(),
+        tailwindcss(),
+    ],
+    ssr: {
+        noExternal: ['lucide-svelte'],
+    },
+    server: {
+        host: process.env.VITE_IPBIND || 'localhost',
+        port: parseInt(process.env.VITE_PORT),
+    },
 });
