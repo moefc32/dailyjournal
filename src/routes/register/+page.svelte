@@ -1,57 +1,57 @@
 <script>
-  import { onMount } from "svelte";
-  import { Notyf } from "notyf";
+    import { onMount } from 'svelte';
+    import { Notyf } from 'notyf';
 
-  import Register from "$lib/component/Register.svelte";
+    import Register from '$lib/component/Register.svelte';
 
-  let notyf;
+    let notyf;
 
-  export let data;
+    export let data;
 
-  let { contents } = data;
+    let { contents } = data;
 
-  let register = {
-    name: "",
-    email: "",
-    password: "",
-    loading: false,
-  };
+    let register = {
+        name: '',
+        email: '',
+        password: '',
+        loading: false,
+    };
 
-  async function doRegister() {
-    register.loading = true;
+    async function doRegister() {
+        register.loading = true;
 
-    try {
-      const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(register),
-      });
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(register),
+            });
 
-      if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error();
 
-      notyf.success("New user account registered successfully.");
+            notyf.success('New user account registered successfully.');
 
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
-    } catch (e) {
-      register.loading = false;
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1500);
+        } catch (e) {
+            register.loading = false;
 
-      console.error(e);
-      notyf.error("Register failed, please try again!");
+            console.error(e);
+            notyf.error('Register failed, please try again!');
+        }
     }
-  }
 
-  onMount(async () => {
-    notyf = new Notyf();
-  });
+    onMount(async () => {
+        notyf = new Notyf();
+    });
 </script>
 
 <main
-  class="flex flex-1 flex-col justify-center items-center gap-6 px-6 pt-6 pb-12 w-full"
+    class="flex flex-1 flex-col justify-center items-center gap-6 px-6 pt-6 pb-12 w-full"
 >
-  <Register {register} {doRegister} />
+    <Register {register} {doRegister} />
 </main>

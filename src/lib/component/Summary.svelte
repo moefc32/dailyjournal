@@ -1,129 +1,131 @@
 <script>
-  import { onMount } from "svelte";
-  import { ArrowLeft, Pen, Trash2, X } from "lucide-svelte";
-  import { Notyf } from "notyf";
-  import datePrettier from "$lib/datePrettier";
+    import { onMount } from 'svelte';
+    import { ArrowLeft, Pen, Trash2, X } from 'lucide-svelte';
+    import { Notyf } from 'notyf';
+    import datePrettier from '$lib/datePrettier';
 
-  let notyf;
+    let notyf;
 
-  export let contents;
+    export let contents;
 
-  let previewImage = "";
+    let previewImage = '';
 
-  async function deleteJournal(id) {
-    try {
-      const response = await fetch(`/${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+    async function deleteJournal(id) {
+        try {
+            const response = await fetch(`/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            });
 
-      if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error();
 
-      notyf.success("Journal deleted successfully.");
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
-    } catch (e) {
-      console.error(e);
-      notyf.error("Delete journal failed, please try again!");
+            notyf.success('Journal deleted successfully.');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1500);
+        } catch (e) {
+            console.error(e);
+            notyf.error('Delete journal failed, please try again!');
+        }
     }
-  }
 
-  onMount(async () => {
-    notyf = new Notyf();
-  });
+    onMount(async () => {
+        notyf = new Notyf();
+    });
 </script>
 
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
-  <div class="flex items-center gap-1 w-full">
-    <a href="/" class="btn btn-sm me-auto">
-      <ArrowLeft size={16} /> Back to Home
-    </a>
-    {#if contents}
-      <button class="btn btn-sm btn-warning">
-        <Pen size={16} /> Edit
-      </button>
-      <button
-        class="btn btn-sm btn-error text-white"
-        on:click={() => journal_delete.showModal()}
-      >
-        <Trash2 size={16} /> Delete
-      </button>
-    {/if}
-  </div>
-  <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
-    {#if !contents}
-      <div class="p-6 text-center text-gray-500">- Journal not found -</div>
-    {:else}
-      <div class="flex flex-col gap-3">
-        <div class="text-2xl font-semibold">{contents.title}</div>
-        <div class="text-gray-500 text-sm">
-          {datePrettier(contents.createdAt)}
-        </div>
-      </div>
-      {#if contents.documentations.length}
-        <div class="flex gap-3 overflow-y-auto">
-          {#each contents.documentations as file, i}
-            <button
-              class="block bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden cursor-pointer"
-              on:click={() => {
-                previewImage = `/file/${file}`;
-                journal_preview.showModal();
-              }}
-            >
-              <img
-                src={`/file/${file}`}
-                class="object-cover w-full h-full"
-                alt="Upload preview"
-              />
+    <div class="flex items-center gap-1 w-full">
+        <a href="/" class="btn btn-sm me-auto">
+            <ArrowLeft size={16} /> Back to Home
+        </a>
+        {#if contents}
+            <button class="btn btn-sm btn-warning">
+                <Pen size={16} /> Edit
             </button>
-          {/each}
-        </div>
-        <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
-      {/if}
-      <div>{contents.content}</div>
-      {#if contents.updatedAt}
-        <div class="text-gray-500 text-sm">
-          Updated at {datePrettier(contents.updatedAt)}
-        </div>
-      {/if}
-    {/if}
-  </div>
+            <button
+                class="btn btn-sm btn-error text-white"
+                on:click={() => journal_delete.showModal()}
+            >
+                <Trash2 size={16} /> Delete
+            </button>
+        {/if}
+    </div>
+    <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
+        {#if !contents}
+            <div class="p-6 text-center text-gray-500">
+                - Journal not found -
+            </div>
+        {:else}
+            <div class="flex flex-col gap-3">
+                <div class="text-2xl font-semibold">{contents.title}</div>
+                <div class="text-gray-500 text-sm">
+                    {datePrettier(contents.createdAt)}
+                </div>
+            </div>
+            {#if contents.documentations.length}
+                <div class="flex gap-3 overflow-y-auto">
+                    {#each contents.documentations as file, i}
+                        <button
+                            class="block bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden cursor-pointer"
+                            on:click={() => {
+                                previewImage = `/file/${file}`;
+                                journal_preview.showModal();
+                            }}
+                        >
+                            <img
+                                src={`/file/${file}`}
+                                class="object-cover w-full h-full"
+                                alt="Upload preview"
+                            />
+                        </button>
+                    {/each}
+                </div>
+                <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
+            {/if}
+            <div>{contents.content}</div>
+            {#if contents.updatedAt}
+                <div class="text-gray-500 text-sm">
+                    Updated at {datePrettier(contents.updatedAt)}
+                </div>
+            {/if}
+        {/if}
+    </div>
 </div>
 
 <dialog id="journal_preview" class="modal modal-bottom sm:modal-middle">
-  <form method="dialog">
-    <button class="flex justify-center items-center p-6 w-screen h-screen">
-      <img
-        src={previewImage}
-        class="max-w-full max-h-full rounded"
-        alt="Documentation"
-        on:click={(event) => event.preventDefault()}
-      />
-    </button>
-  </form>
+    <form method="dialog">
+        <button class="flex justify-center items-center p-6 w-screen h-screen">
+            <img
+                src={previewImage}
+                class="max-w-full max-h-full rounded"
+                alt="Documentation"
+                on:click={event => event.preventDefault()}
+            />
+        </button>
+    </form>
 </dialog>
 
 <dialog id="journal_delete" class="modal modal-bottom sm:modal-middle">
-  <div class="modal-box">
-    <h3 class="text-lg font-bold">Delete Journal</h3>
-    <p class="py-4">Are you sure you want to delete this journal?</p>
-    <div class="modal-action mt-3">
-      <form method="dialog">
-        <button class="btn">Cancel</button>
-        <button
-          class="btn btn-error text-white"
-          on:click={() => deleteJournal(contents.id)}
-        >
-          Delete
-        </button>
-      </form>
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Delete Journal</h3>
+        <p class="py-4">Are you sure you want to delete this journal?</p>
+        <div class="modal-action mt-3">
+            <form method="dialog">
+                <button class="btn">Cancel</button>
+                <button
+                    class="btn btn-error text-white"
+                    on:click={() => deleteJournal(contents.id)}
+                >
+                    Delete
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
-  <form method="dialog" class="modal-backdrop">
-    <button>close</button>
-  </form>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
 </dialog>

@@ -54,7 +54,7 @@ export async function POST({ cookies, request }) {
             const token = await jwt.sign({ id: lookData.id },
                 VITE_JWT_SECRET, { expiresIn: VITE_JWT_EXPIRATION ?? '1h' });
 
-            const maxAge = parseMs(VITE_JWT_EXPIRATION ?? '1h');
+            const maxAge = parseMs(VITE_JWT_EXPIRATION ?? '1h') * 1000;
             cookies.set('access_token', token, {
                 path: '/',
                 httpOnly: true,

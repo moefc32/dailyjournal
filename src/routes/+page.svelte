@@ -1,11 +1,11 @@
 <script>
-  import Journals from "$lib/component/Journals.svelte";
+    import Journals from '$lib/component/Journals.svelte';
 
-  export let data;
+    export let data;
 
-  let { contents } = data;
+    let { contents } = data;
 </script>
 
 <main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">
-  <Journals {contents} />
+    <Journals {contents} />
 </main>

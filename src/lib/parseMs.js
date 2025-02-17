@@ -8,14 +8,14 @@ export default function parseMs(str) {
     const unit = match[2] || 'ms';
 
     const multipliers = {
-        ms: 1 / 1000,
-        s: 1,
-        m: 60,
-        h: 3600,
-        d: 86400,
-        w: 604800,
-        y: 31557600,
-    };
+        ms: 1,
+        s: 1000,
+        m: 60000,
+        h: 3600000,
+        d: 86400000,
+        w: 604800000,
+        y: 31557600000,
+    }
 
     return Math.round(value * (multipliers[unit] || 1));
 }
