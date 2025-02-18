@@ -15,11 +15,11 @@
     let searchTimeout;
     let journalPagination = {
         page: 1,
-        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS) || 10,
+        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS, 10) || 10,
     };
     let searchPagination = {
         page: 1,
-        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS) || 10,
+        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS, 10) || 10,
     };
 
     async function handleKeydown() {

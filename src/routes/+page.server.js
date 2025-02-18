@@ -12,7 +12,7 @@ export async function load({ parent }) {
             where: { userId: userData.id },
             orderBy: { createdAt: 'desc' },
             skip: 0,
-            take: parseInt(VITE_PAGINATION_ITEMS) || 10,
+            take: parseInt(VITE_PAGINATION_ITEMS, 10) || 10,
             select: {
                 id: true,
                 title: true,

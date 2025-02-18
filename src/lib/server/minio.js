@@ -11,7 +11,7 @@ const minioClient = new Client({
     accessKey: VITE_MINIO_ACCESS_KEY,
     secretKey: VITE_MINIO_SECRET_KEY,
     endPoint: VITE_MINIO_HOST,
-    port: parseInt(VITE_MINIO_PORT),
+    port: parseInt(VITE_MINIO_PORT, 10),
     useSSL: false,
 });
 
