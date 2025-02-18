@@ -1,13 +1,14 @@
 import { VITE_PAGINATION_ITEMS } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
+import { stripUUID } from '$lib/uuid.js';
 
 export async function load({ parent }) {
     const { userData } = await parent();
 
     if (!userData) return;
 
-    const [row, total] = await Promise.all([
+    const [getRow, total] = await Promise.all([
         prisma.journals.findMany({
             where: { userId: userData.id },
             orderBy: { createdAt: 'desc' },
@@ -28,6 +29,11 @@ export async function load({ parent }) {
             where: { userId: userData.id },
         }),
     ]);
+
+    const row = getRow.map(item => ({
+        ...item,
+        id: stripUUID(item.id),
+    }));
 
     return {
         pageTitle: '',

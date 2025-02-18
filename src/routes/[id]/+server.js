@@ -3,13 +3,14 @@ import {
     VITE_IMAGE_UPLOAD_LIMIT,
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import sharp from 'sharp';
 import {
     uploadMinio,
     deleteMinio,
 } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
-import sharp from 'sharp';
 import trimText from '$lib/trimText';
+import { parseUUID } from '$lib/uuid.js';
 
 const MAX_IMAGE_DIMENSION = 1200;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
@@ -32,7 +33,7 @@ export async function PATCH({ params, request }) {
         data.updatedAt = new Date();
 
         await prisma.journals.update({
-            where: { id },
+            where: { id: parseUUID(id) },
             data,
         });
 
@@ -136,7 +137,7 @@ export async function DELETE({ params }) {
         await Promise.all(files.map((file) => deleteMinio(file.id)));
 
         const query = await prisma.journals.delete({
-            where: { id },
+            where: { id: parseUUID(id) },
         });
 
         return json({

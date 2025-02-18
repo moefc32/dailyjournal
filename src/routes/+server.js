@@ -5,6 +5,7 @@ import {
 import { json } from '@sveltejs/kit';
 import decodeToken from '$lib/server/token';
 import prisma from '$lib/server/prisma';
+import { stripUUID } from '$lib/uuid.js';
 
 export async function GET({ cookies, url }) {
     const search = url.searchParams.get('search')?.trim() || undefined;
@@ -17,7 +18,7 @@ export async function GET({ cookies, url }) {
     const decoded_token = decodeToken(access_token);
 
     try {
-        const [row, total] = await Promise.all([
+        const [getRow, total] = await Promise.all([
             prisma.journals.findMany({
                 where: {
                     userId: decoded_token?.id,
@@ -41,6 +42,11 @@ export async function GET({ cookies, url }) {
                 where: { userId: decoded_token?.id },
             }),
         ]);
+
+        const row = getRow.map(item => ({
+            ...item,
+            id: stripUUID(item.id),
+        }));
 
         return json({
             application: VITE_APP_NAME,

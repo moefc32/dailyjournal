@@ -30,8 +30,7 @@ export async function uploadMinio(file, directory, fileName) {
 
         return objectName;
     } catch (e) {
-        console.error('Upload file to MinIO failed!');
-        return false;
+        throw new Error('Upload file to MinIO failed!');
     }
 }
 
@@ -51,8 +50,7 @@ export async function fetchMinio(path) {
                 || 'application/octet-stream',
         };
     } catch (e) {
-        console.error('Get file from MinIO failed!');
-        return false;
+        throw new Error('Get file from MinIO failed!');
     }
 }
 
@@ -65,7 +63,6 @@ export async function deleteMinio(path) {
 
         return true;
     } catch (e) {
-        console.error('Delete file from MinIO failed!');
-        return false;
+        throw new Error('Delete file from MinIO failed!');
     }
 }
