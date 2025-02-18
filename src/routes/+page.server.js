@@ -13,6 +13,16 @@ export async function load({ parent }) {
             orderBy: { createdAt: 'desc' },
             skip: 0,
             take: parseInt(VITE_PAGINATION_ITEMS) || 10,
+            select: {
+                id: true,
+                title: true,
+                createdAt: true,
+                documentations: {
+                    select: { id: true },
+                    orderBy: { order: 'asc' },
+                    take: 1,
+                },
+            },
         }),
         prisma.journals.count({
             where: { userId: userData.id },

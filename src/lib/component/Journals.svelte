@@ -106,14 +106,26 @@
     {#each search.keyword ? search.results : contents.row as item, i}
         <a
             href={`/${item.id}`}
-            class="card flex flex-col gap-2 p-6 bg-white w-full shadow-xl"
+            class="card flex flex-row gap-4 p-6 bg-white w-full shadow-xl"
+            title={item.title}
         >
-            <span class="block text-xl font-semibold">
-                {item.title}
-            </span>
-            <span class="text-gray-500 text-sm">
-                {datePrettier(item.createdAt)}
-            </span>
+            <div class="flex flex-1 flex-col gap-2">
+                <p class="text-xl font-semibold line-clamp-2">
+                    {item.title}
+                </p>
+                <p class="text-gray-500 text-sm">
+                    {datePrettier(item.createdAt)}
+                </p>
+            </div>
+            <div
+                class="relative bg-gray-200 !w-20 min-w-20 aspect-square rounded-lg overflow-hidden"
+            >
+                <img
+                    src={`/file/${item.documentations[0].id}`}
+                    class="object-cover w-full h-full"
+                    alt="Visual bookmark"
+                />
+            </div>
         </a>
     {/each}
 </div>

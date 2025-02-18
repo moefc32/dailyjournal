@@ -61,10 +61,12 @@
             </div>
         {:else}
             <div class="flex flex-col gap-3">
-                <div class="text-2xl font-semibold">{contents.title}</div>
-                <div class="text-gray-500 text-sm">
+                <p class="text-2xl font-semibold">
+                    {contents.title}
+                </p>
+                <p class="text-gray-500 text-sm">
                     {datePrettier(contents.createdAt)}
-                </div>
+                </p>
             </div>
             {#if contents.documentations.length}
                 <div class="flex gap-3 overflow-y-auto">
@@ -86,16 +88,18 @@
                 </div>
                 <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
             {/if}
-            <div>{contents.content}</div>
+            <p>{contents.content}</p>
             {#if contents.updatedAt}
-                <div class="text-gray-500 text-sm">
+                <p class="text-gray-500 text-sm">
                     Updated at {datePrettier(contents.updatedAt)}
-                </div>
+                </p>
             {/if}
         {/if}
     </div>
 </div>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <dialog id="journal_preview" class="modal modal-bottom sm:modal-middle">
     <form method="dialog">
         <button class="flex justify-center items-center p-6 w-screen h-screen">
