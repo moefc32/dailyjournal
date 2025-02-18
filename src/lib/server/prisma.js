@@ -7,7 +7,7 @@ export default prisma;
 export async function checkIsUserExists(userId) {
     if (!userId) return false;
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
         where: { id: userId },
         select: { id: true },
     });

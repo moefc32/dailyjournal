@@ -69,6 +69,13 @@ export async function POST({ cookies, request }) {
                     }).toBuffer();
                 }
 
+                optimizedBuffer = await sharp(optimizedBuffer)
+                    .webp({
+                        quality: 75,
+                        effort: 6,
+                    })
+                    .toBuffer();
+
                 await uploadMinio(optimizedBuffer, '', newFile.id);
                 return newFile.id;
             })
