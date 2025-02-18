@@ -6,6 +6,9 @@
     export let journal;
     export let submitJournal;
 
+    const IMAGE_UPLOAD_LIMIT =
+        parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
+
     let fileInput;
     let currentTime = '';
     let dragging = false;
@@ -29,8 +32,11 @@
     function handleFileSelect(event) {
         let selectedFiles = Array.from(event.target.files);
 
-        if (journal.files.length + selectedFiles.length > 10) {
-            selectedFiles = selectedFiles.slice(0, 10 - journal.files.length);
+        if (journal.files.length + selectedFiles.length > IMAGE_UPLOAD_LIMIT) {
+            selectedFiles = selectedFiles.slice(
+                0,
+                IMAGE_UPLOAD_LIMIT - journal.files.length,
+            );
         }
 
         processFiles(selectedFiles);
@@ -86,7 +92,7 @@
                 {currentTime}
             </div>
         </div>
-        {#if journal.files.length < 10}
+        {#if journal.files.length < IMAGE_UPLOAD_LIMIT}
             <button
                 class="card block p-9 {dragging &&
                     'bg-gray-100'} text-center border-2 border-dashed border-gray-300 hover:border-gray-500 transition duration-300 ease-in-out cursor-pointer"

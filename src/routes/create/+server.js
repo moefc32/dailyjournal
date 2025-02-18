@@ -1,4 +1,7 @@
-import { VITE_APP_NAME } from '$env/static/private';
+import {
+    VITE_APP_NAME,
+    VITE_IMAGE_UPLOAD_LIMIT,
+} from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import decodeToken from '$lib/server/token';
 import { uploadMinio } from '$lib/server/minio';
@@ -8,12 +11,14 @@ import trimText from '$lib/trimText';
 
 const MAX_IMAGE_DIMENSION = 1200;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
+const IMAGE_UPLOAD_LIMIT =
+    parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
 
 export async function POST({ cookies, request }) {
     const formData = await request.formData();
     const title = trimText(formData.get('title'));
     const content = trimText(formData.get('content'));
-    const files = formData.getAll('files[]');
+    const files = formData.getAll('files[]').slice(0, IMAGE_UPLOAD_LIMIT);
 
     const access_token = cookies.get('access_token');
     const decoded_token = decodeToken(access_token);
