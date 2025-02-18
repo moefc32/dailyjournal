@@ -88,8 +88,12 @@
 </script>
 
 <div class="flex items-center gap-3 w-full max-w-screen-sm">
-    <a href="/create" class="btn bg-emerald-600 text-white">
-        <Plus size={16} /> Create New Journal
+    <a
+        href="/create"
+        class="btn bg-emerald-600 text-white"
+        title="Create new journal"
+    >
+        <Plus size={16} /> Create New
     </a>
     <label class="input ms-auto w-90 max-w-full">
         <Search size={16} />
@@ -117,15 +121,17 @@
                     {datePrettier(item.createdAt)}
                 </p>
             </div>
-            <div
-                class="relative bg-gray-200 !w-20 min-w-20 aspect-square rounded-lg overflow-hidden"
-            >
-                <img
-                    src={`/file/${item.documentations[0].id}`}
-                    class="object-cover w-full h-full"
-                    alt="Visual bookmark"
-                />
-            </div>
+            {#if item.documentations.length}
+                <div
+                    class="relative bg-gray-200 !w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
+                >
+                    <img
+                        src={`/file/${item.documentations[0].id}`}
+                        class="object-cover w-full h-full"
+                        alt="Visual bookmark"
+                    />
+                </div>
+            {/if}
         </a>
     {/each}
 </div>

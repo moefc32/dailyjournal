@@ -81,7 +81,13 @@ export async function POST({ cookies, request }) {
                     })
                     .toBuffer();
 
-                await uploadMinio(optimizedBuffer, '', newFile.id);
+                await uploadMinio({
+                    buffer: optimizedBuffer,
+                    type: 'image/webp',
+                    arrayBuffer: async function () {
+                        return this.buffer;
+                    },
+                }, '', newFile.id);
                 return newFile.id;
             })
         );

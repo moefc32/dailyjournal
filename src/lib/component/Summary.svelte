@@ -7,47 +7,34 @@
     let notyf;
 
     export let contents;
+    export let deleteJournal;
 
     let previewImage = '';
-
-    async function deleteJournal(id) {
-        try {
-            const response = await fetch(`/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) throw new Error();
-
-            notyf.success('Journal deleted successfully.');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1500);
-        } catch (e) {
-            console.error(e);
-            notyf.error('Delete journal failed, please try again!');
-        }
-    }
 
     onMount(async () => {
         notyf = new Notyf();
     });
 </script>
 
+<!-- svelte-ignore a11y_interactive_supports_focus -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_missing_attribute -->
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
     <div class="flex items-center gap-1 w-full">
-        <a href="/" class="btn btn-sm me-auto">
+        <a href="/" class="btn btn-sm me-auto" title="Back to home page">
             <ArrowLeft size={16} /> Back to Home
         </a>
         {#if contents}
-            <button class="btn btn-sm btn-warning">
+            <button
+                class="btn btn-sm btn-warning"
+                title="Edit this journal"
+                on:click={() => (window.location.href = `/${contents.id}?edit`)}
+            >
                 <Pen size={16} /> Edit
             </button>
             <button
                 class="btn btn-sm btn-error text-white"
+                title="Delete this journal"
                 on:click={() => journal_delete.showModal()}
             >
                 <Trash2 size={16} /> Delete
@@ -65,33 +52,34 @@
                     {contents.title}
                 </p>
                 <p class="text-gray-500 text-sm">
-                    {datePrettier(contents.createdAt)}
+                    Published on {datePrettier(contents.createdAt)}
                 </p>
             </div>
             {#if contents.documentations.length}
                 <div class="flex gap-3 overflow-y-auto">
                     {#each contents.documentations as file, i}
-                        <button
-                            class="block bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden cursor-pointer"
+                        <div
+                            role="button"
+                            class="block bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                            title={`Image attachment ${i + 1}`}
                             on:click={() => {
                                 previewImage = `/file/${file}`;
-                                journal_preview.showModal();
+                                image_preview.showModal();
                             }}
                         >
                             <img
                                 src={`/file/${file}`}
                                 class="object-cover w-full h-full"
-                                alt="Upload preview"
                             />
-                        </button>
+                        </div>
                     {/each}
                 </div>
-                <hr class="mt-3 mb-0 bg-gray-300 h-[2px] border-0" />
+                <hr class="mt-3 mb-0 bg-gray-400 h-[1px] border-0" />
             {/if}
             <p>{contents.content}</p>
             {#if contents.updatedAt}
                 <p class="text-gray-500 text-sm">
-                    Updated at {datePrettier(contents.updatedAt)}
+                    Updated on {datePrettier(contents.updatedAt)}
                 </p>
             {/if}
         {/if}
@@ -100,12 +88,12 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<dialog id="journal_preview" class="modal modal-bottom sm:modal-middle">
+<dialog id="image_preview" class="modal modal-bottom sm:modal-middle">
     <form method="dialog">
         <button class="flex justify-center items-center p-6 w-screen h-screen">
             <img
                 src={previewImage}
-                class="max-w-full max-h-full rounded"
+                class="bg-white max-w-full max-h-full rounded"
                 alt="Documentation"
                 on:click={event => event.preventDefault()}
             />

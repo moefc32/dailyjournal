@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { Notyf } from 'notyf';
 
-    import Editor from '$lib/component/Editor.svelte';
+    import EditorCreate from '$lib/component/EditorCreate.svelte';
 
     let notyf;
 
@@ -54,5 +54,5 @@
 </script>
 
 <main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">
-    <Editor {journal} {submitJournal} />
+    <EditorCreate {journal} {submitJournal} />
 </main>

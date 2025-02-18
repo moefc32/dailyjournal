@@ -6,6 +6,8 @@
     export let journal;
     export let submitJournal;
 
+    let previewImage = '';
+
     const IMAGE_UPLOAD_LIMIT =
         parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
 
@@ -74,9 +76,12 @@
     });
 </script>
 
+<!-- svelte-ignore a11y_interactive_supports_focus -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_missing_attribute -->
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
     <div class="flex items-center gap-1 w-full">
-        <a href="/" class="btn btn-sm">
+        <a href="/" class="btn btn-sm" title="Back to home page">
             <ArrowLeft size={16} /> Back to Home
         </a>
     </div>
@@ -113,18 +118,26 @@
             <div class="flex gap-3 overflow-y-auto">
                 {#each journal.files as file, i}
                     <div
-                        class="relative bg-gray-200 !w-24 min-w-24 aspect-square rounded-lg overflow-hidden"
+                        role="button"
+                        class="relative bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        title={`Image attachment ${i + 1}`}
+                        on:click={() => {
+                            previewImage = URL.createObjectURL(file);
+                            image_preview.showModal();
+                        }}
                     >
                         <button
                             class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-none rounded-full cursor-pointer top-1 right-1 shadow"
-                            on:click={() => removeFile(i)}
+                            on:click={e => {
+                                e.stopPropagation();
+                                removeFile(i);
+                            }}
                         >
                             <X size={12} />
                         </button>
                         <img
                             src={URL.createObjectURL(file)}
                             class="object-cover w-full h-full"
-                            alt="Upload preview"
                         />
                     </div>
                 {/each}
@@ -147,7 +160,7 @@
             ></textarea>
             <button
                 class="btn bg-emerald-600 self-start text-white mt-2"
-                title="Submit new journal"
+                title="Submit this journal"
                 disabled={!journal.title || !journal.content || journal.loading}
                 on:click={() => submitJournal()}
             >
@@ -160,3 +173,18 @@
         </div>
     </div>
 </div>
+
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<dialog id="image_preview" class="modal modal-bottom sm:modal-middle">
+    <form method="dialog">
+        <button class="flex justify-center items-center p-6 w-screen h-screen">
+            <img
+                src={previewImage}
+                class="bg-white max-w-full max-h-full rounded"
+                alt="Documentation"
+                on:click={event => event.preventDefault()}
+            />
+        </button>
+    </form>
+</dialog>

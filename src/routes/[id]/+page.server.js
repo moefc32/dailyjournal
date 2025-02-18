@@ -1,9 +1,10 @@
 import prisma from '$lib/server/prisma';
 
-export async function load({ params, parent }) {
+export async function load({ params, parent, url }) {
     const pageTitle = '';
     const { userData } = await parent();
     const { id } = params;
+    const edit = url.searchParams.has('edit');
 
     const contents = await prisma.journals.findUnique({
         where: { id },
@@ -23,6 +24,14 @@ export async function load({ params, parent }) {
     return {
         pageTitle,
         userData,
-        contents,
+        edit_mode: edit,
+        contents: {
+            ...contents,
+            uploaded: [
+                ...contents.documentations,
+            ],
+            deleted: [],
+            files: [],
+        },
     };
 }
