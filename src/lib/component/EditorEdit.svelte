@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { ArrowLeft, Trash2, X, Check } from 'lucide-svelte';
+    import { ArrowLeft, Trash2, Calendar, X, Check } from 'lucide-svelte';
     import datePrettier from '$lib/datePrettier';
 
     export let contents;
@@ -138,7 +138,8 @@
                 placeholder="Journal title"
                 bind:value={contents.title}
             />
-            <div class="text-gray-500 text-sm">
+            <div class="flex items-center gap-1 text-gray-500 text-sm">
+                <Calendar size={12} />
                 Published on {datePrettier(contents.createdAt)}
             </div>
         </div>

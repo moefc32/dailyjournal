@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { ArrowLeft, Pen, Trash2, X } from 'lucide-svelte';
+    import { ArrowLeft, Pen, Trash2, Calendar } from 'lucide-svelte';
     import { Notyf } from 'notyf';
     import datePrettier from '$lib/datePrettier';
 
@@ -39,9 +39,9 @@
     <div class="flex items-center gap-1 w-full">
         <a
             href="/"
-            class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
+            class="btn btn-sm me-auto {contents?.loading && 'btn-disabled'}"
             title="Back to home page"
-            aria-disabled={contents.loading}
+            aria-disabled={contents?.loading}
         >
             <ArrowLeft size={16} /> Back to Home
         </a>
@@ -66,15 +66,18 @@
     </div>
     <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
         {#if !contents}
-            <div class="p-6 text-center text-gray-500">
-                - Journal not found -
+            <div
+                class="not-found flex flex-col justify-end items-center text-gray-700 text-xl h-[200px]"
+            >
+                Requested journal is not found
             </div>
         {:else}
             <div class="flex flex-col gap-3">
                 <p class="text-2xl font-semibold">
                     {contents.title}
                 </p>
-                <p class="text-gray-500 text-sm">
+                <p class="flex items-center gap-1 text-gray-500 text-sm">
+                    <Calendar size={12} />
                     Published on {datePrettier(contents.createdAt)}
                 </p>
             </div>
@@ -105,7 +108,8 @@
             {/if}
             <p>{contents.content}</p>
             {#if contents.updatedAt}
-                <p class="text-gray-500 text-sm">
+                <p class="flex items-center gap-1 text-gray-500 text-sm">
+                    <Pen size={12} />
                     Updated on {datePrettier(contents.updatedAt)}
                 </p>
             {/if}
@@ -148,3 +152,10 @@
         <button>close</button>
     </form>
 </dialog>
+
+<style>
+    .not-found {
+        background: url(/not-found.svg) center top no-repeat;
+        background-size: 180px;
+    }
+</style>

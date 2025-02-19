@@ -17,9 +17,16 @@ export async function load({ params, parent, url }) {
         },
     });
 
-    if (contents?.documentations) {
+    if (Array.isArray(contents?.documentations)) {
         contents.documentations =
             contents.documentations.map((item) => item.id);
+    }
+
+    if (!contents) {
+        return {
+            pageTitle,
+            userData,
+        }
     }
 
     return {
@@ -28,10 +35,8 @@ export async function load({ params, parent, url }) {
         edit_mode: edit,
         contents: {
             ...contents,
-            id: stripUUID(contents.id),
-            uploaded: [
-                ...contents.documentations,
-            ],
+            id: stripUUID(contents?.id),
+            uploaded: contents?.documentations,
             deleted: [],
             files: [],
             loading: false,

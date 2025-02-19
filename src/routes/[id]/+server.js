@@ -57,7 +57,7 @@ export async function PATCH({ params, request }) {
                 const order = i + 1 + documentations.length;
                 const newFile = await prisma.documentations.create({
                     data: {
-                        journalId: id,
+                        journalId: parseUUID(id),
                         order,
                     },
                     select: { id: true },
@@ -130,7 +130,7 @@ export async function DELETE({ params }) {
 
     try {
         const files = await prisma.documentations.findMany({
-            where: { journalId: id },
+            where: { journalId: parseUUID(id) },
             select: { id: true },
         });
 

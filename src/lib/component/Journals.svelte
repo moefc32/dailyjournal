@@ -1,5 +1,5 @@
 <script>
-    import { Plus, Search } from 'lucide-svelte';
+    import { Plus, Search, Calendar } from 'lucide-svelte';
     import datePrettier from '$lib/datePrettier';
     import trimText from '$lib/trimText';
 
@@ -110,34 +110,72 @@
     </label>
 </div>
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
-    {#each search.keyword ? search.results : contents.row as item, i}
-        <a
-            href={`/${item.id}`}
-            class="card flex flex-row gap-4 p-6 bg-white w-full shadow-xl"
-            title={item.title}
+    {#if search.keyword ? !search.results.length : !contents.row.length}
+        <div
+            class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl"
         >
-            <div class="flex flex-1 flex-col gap-2">
-                <p class="text-xl font-semibold line-clamp-2">
-                    {item.title}
-                </p>
-                <p class="text-gray-500 text-sm">
-                    {datePrettier(item.createdAt)}
-                </p>
+            <div
+                class="{search.keyword
+                    ? 'no-result'
+                    : 'no-data'} flex flex-col justify-end items-center text-gray-700 text-xl h-[135px]"
+            >
+                {#if search.keyword}
+                    <span>No journal found</span>
+                {:else}
+                    <span>
+                        No journal, why don't we <a
+                            href="/create"
+                            class="text-emerald-600"
+                        >
+                            create one
+                        </a>?
+                    </span>
+                {/if}
             </div>
-            {#if item.documentations.length}
-                <div
-                    class="relative bg-gray-200 !w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
-                >
-                    <img
-                        src={`/file/${item.documentations[0].id}`}
-                        class="object-cover w-full h-full"
-                        alt="Visual bookmark"
-                    />
+        </div>
+    {:else}
+        {#each search.keyword ? search.results : contents.row as item, i}
+            <a
+                href={`/${item.id}`}
+                class="card flex flex-row gap-4 p-6 bg-white w-full shadow-xl"
+                title={item.title}
+            >
+                <div class="flex flex-1 flex-col gap-2">
+                    <p class="text-xl font-semibold line-clamp-2">
+                        {item.title}
+                    </p>
+                    <p class="flex items-center gap-1 text-gray-500 text-sm">
+                        <Calendar size={12} />
+                        {datePrettier(item.createdAt)}
+                    </p>
                 </div>
-            {/if}
-        </a>
-    {/each}
+                {#if item.documentations.length}
+                    <div
+                        class="relative bg-gray-200 !w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
+                    >
+                        <img
+                            src={`/file/${item.documentations[0].id}`}
+                            class="object-cover w-full h-full"
+                            alt="Visual bookmark"
+                        />
+                    </div>
+                {/if}
+            </a>
+        {/each}
+    {/if}
 </div>
 {#if pages > 1}
     <Pagination {pages} />
 {/if}
+
+<style>
+    .no-result {
+        background: url(/no-result.svg) center top no-repeat;
+        background-size: 180px;
+    }
+
+    .no-data {
+        background: url(/no-data.svg) center top no-repeat;
+        background-size: 180px;
+    }
+</style>
