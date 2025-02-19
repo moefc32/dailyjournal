@@ -7,7 +7,13 @@
     export let saveJournal;
     export let deleteJournal;
 
+    const IMAGE_UPLOAD_LIMIT =
+        parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
+
+    let fileInput;
+    let dragging = false;
     let previewImage = '';
+    let isLoading = false;
     let scrollContainer;
 
     function handleScroll(event) {
@@ -24,12 +30,6 @@
         event.preventDefault();
         scrollContainer.scrollLeft += event.deltaY;
     }
-
-    const IMAGE_UPLOAD_LIMIT =
-        parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
-
-    let fileInput;
-    let dragging = false;
 
     function handleDrop(event) {
         event.preventDefault();
@@ -120,7 +120,8 @@
                 <ArrowLeft size={16} /> Cancel Edit
             </a>
             <button
-                class="btn btn-sm btn-outline btn-error hover:text-white"
+                class="btn btn-sm btn-outline btn-error {contents.loading ||
+                    'hover:text-white'}"
                 title="Delete this journal"
                 disabled={contents.loading}
                 on:click={() => journal_delete.showModal()}
@@ -239,19 +240,22 @@
             ></textarea>
             <div class="flex items-center gap-1 mt-2">
                 <button
-                    class="btn bg-emerald-600 self-start text-white"
+                    class="btn bg-emerald-600 self-start {contents.loading ||
+                        'text-white'}"
                     title="Save this journal"
                     disabled={!contents.title ||
                         !contents.content ||
                         contents.loading}
-                    on:click={() =>
+                    on:click={() => {
                         saveJournal(
                             contents.uploaded,
                             contents.deleted,
                             contents.files,
-                        )}
+                        );
+                        isLoading = true;
+                    }}
                 >
-                    {#if contents.loading}
+                    {#if contents.loading && isLoading}
                         <span class="loading loading-spinner loading-xs"></span>
                         Loading...
                     {:else}
@@ -287,7 +291,9 @@
                 <button class="btn">Cancel</button>
                 <button
                     class="btn btn-error text-white"
-                    on:click={() => deleteJournal(contents.id)}
+                    on:click={() => {
+                        deleteJournal(contents.id);
+                    }}
                 >
                     Delete
                 </button>

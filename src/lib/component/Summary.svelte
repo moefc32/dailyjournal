@@ -55,7 +55,7 @@
                 <Pen size={16} /> Edit
             </button>
             <button
-                class="btn btn-sm btn-error text-white"
+                class="btn btn-sm btn-error {contents.loading || 'text-white'}"
                 title="Delete this journal"
                 disabled={contents.loading}
                 on:click={() => journal_delete.showModal()}

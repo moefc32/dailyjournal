@@ -68,7 +68,8 @@
         {/if}
     </label>
     <button
-        class="btn bg-emerald-600 self-start text-white mt-2"
+        class="btn bg-emerald-600 self-start mt-2 {settings.loading ||
+            'text-white'}"
         title="Save account data"
         disabled={!settings.email ||
             !isValidEmail(settings.email) ||

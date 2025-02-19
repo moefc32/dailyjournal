@@ -71,7 +71,7 @@
         {/if}
     </label>
     <button
-        class="btn bg-emerald-600 text-white mt-2"
+        class="btn bg-emerald-600 mt-2 {register.loading || 'text-white'}"
         title="Register new user account"
         disabled={(!register.name && !register.email) ||
             !isValidEmail(register.email) ||

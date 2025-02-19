@@ -6,7 +6,13 @@
     export let journal;
     export let submitJournal;
 
+    const IMAGE_UPLOAD_LIMIT =
+        parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
+
+    let fileInput;
+    let dragging = false;
     let previewImage = '';
+    let currentTime = datePrettier(Date.now(), true, false);
     let scrollContainer;
 
     function handleScroll(event) {
@@ -23,13 +29,6 @@
         event.preventDefault();
         scrollContainer.scrollLeft += event.deltaY;
     }
-
-    const IMAGE_UPLOAD_LIMIT =
-        parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
-
-    let fileInput;
-    let currentTime = '';
-    let dragging = false;
 
     function handleDrop(event) {
         event.preventDefault();
@@ -97,7 +96,12 @@
 <!-- svelte-ignore a11y_missing_attribute -->
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
     <div class="flex items-center gap-1 w-full">
-        <a href="/" class="btn btn-sm" title="Back to home page">
+        <a
+            href="/"
+            class="btn btn-sm {journal.loading && 'btn-disabled'}"
+            title="Back to home page"
+            aria-disabled={journal.loading}
+        >
             <ArrowLeft size={16} /> Back to Home
         </a>
     </div>
@@ -179,7 +183,8 @@
                 bind:value={journal.content}
             ></textarea>
             <button
-                class="btn bg-emerald-600 self-start text-white mt-2"
+                class="btn bg-emerald-600 self-start mt-2 {journal.loading ||
+                    'text-white'}"
                 title="Submit this journal"
                 disabled={!journal.title || !journal.content || journal.loading}
                 on:click={() => submitJournal()}

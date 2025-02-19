@@ -31,7 +31,7 @@
                 currentPage === 2 ? '/' : `/?page=${currentPage - 1}`)}
         class="join-item btn"
         title="Previous page"
-        disabled={currentPage === 1 || pages === 1}
+        disabled={currentPage === 1}
     >
         <ChevronLeft size={16} />
     </button>
@@ -58,7 +58,7 @@
         on:click={() => (window.location.href = `/?page=${currentPage + 1}`)}
         class="join-item btn"
         title="Next page"
-        disabled={pages === 1 || pages === currentPage}
+        disabled={currentPage === pages}
     >
         <ChevronRight size={16} />
     </button>
