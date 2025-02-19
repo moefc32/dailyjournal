@@ -10,6 +10,22 @@
     export let deleteJournal;
 
     let previewImage = '';
+    let scrollContainer;
+
+    function handleScroll(event) {
+        const maxScrollLeft =
+            scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+        if (
+            (scrollContainer.scrollLeft === 0 && event.deltaY < 0) ||
+            (scrollContainer.scrollLeft >= maxScrollLeft && event.deltaY > 0)
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        scrollContainer.scrollLeft += event.deltaY;
+    }
 
     onMount(async () => {
         notyf = new Notyf();
@@ -56,7 +72,11 @@
                 </p>
             </div>
             {#if contents.documentations.length}
-                <div class="flex gap-3 overflow-y-auto">
+                <div
+                    class="flex gap-3 overflow-x-auto"
+                    bind:this={scrollContainer}
+                    on:wheel={handleScroll}
+                >
                     {#each contents.documentations as file, i}
                         <div
                             role="button"

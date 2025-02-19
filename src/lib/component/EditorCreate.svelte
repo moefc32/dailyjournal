@@ -7,6 +7,22 @@
     export let submitJournal;
 
     let previewImage = '';
+    let scrollContainer;
+
+    function handleScroll(event) {
+        const maxScrollLeft =
+            scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+        if (
+            (scrollContainer.scrollLeft === 0 && event.deltaY < 0) ||
+            (scrollContainer.scrollLeft >= maxScrollLeft && event.deltaY > 0)
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        scrollContainer.scrollLeft += event.deltaY;
+    }
 
     const IMAGE_UPLOAD_LIMIT =
         parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
@@ -115,7 +131,11 @@
             </button>
         {/if}
         {#if journal.files.length}
-            <div class="flex gap-3 overflow-y-auto">
+            <div
+                class="flex gap-3 overflow-x-auto"
+                bind:this={scrollContainer}
+                on:wheel={handleScroll}
+            >
                 {#each journal.files as file, i}
                     <div
                         role="button"
