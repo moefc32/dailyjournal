@@ -5,6 +5,7 @@
 
     export let contents;
     export let saveJournal;
+    export let deleteJournal;
 
     let previewImage = '';
     let scrollContainer;
@@ -101,20 +102,27 @@
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
     <div class="flex items-center gap-1 w-full">
         {#if !contents}
-            <a href="/" class="btn btn-sm me-auto" title="Back to home page">
+            <a
+                href="/"
+                class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
+                title="Back to home page"
+                aria-disabled={contents.loading}
+            >
                 <ArrowLeft size={16} /> Back to Home
             </a>
         {:else}
             <a
                 href={contents.id}
-                class="btn btn-sm me-auto"
+                class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
                 title="Cancel edit and back to journal detail"
+                aria-disabled={contents.loading}
             >
                 <ArrowLeft size={16} /> Cancel Edit
             </a>
             <button
                 class="btn btn-sm btn-outline btn-error hover:text-white"
                 title="Delete this journal"
+                disabled={contents.loading}
                 on:click={() => journal_delete.showModal()}
             >
                 <Trash2 size={16} /> Delete

@@ -34,6 +34,7 @@ export async function load({ params, parent, url }) {
             ],
             deleted: [],
             files: [],
+            loading: false,
         },
     };
 }

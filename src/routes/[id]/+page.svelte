@@ -54,6 +54,8 @@
     }
 
     async function deleteJournal(id) {
+        contents.loading = true;
+
         try {
             const response = await fetch(`/${id}`, {
                 method: 'DELETE',
@@ -70,6 +72,8 @@
                 window.location.href = '/';
             }, 1500);
         } catch (e) {
+            contents.loading = false;
+
             console.error(e);
             notyf.error('Delete journal failed, please try again!');
         }

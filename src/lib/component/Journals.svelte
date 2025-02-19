@@ -5,6 +5,9 @@
 
     import Pagination from './Pagination.svelte';
 
+    const PAGINATION_ITEMS =
+        parseInt(import.meta.env.VITE_PAGINATION_ITEMS, 10) || 10;
+
     export let contents;
 
     let search = {
@@ -15,11 +18,11 @@
     let searchTimeout;
     let journalPagination = {
         page: 1,
-        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS, 10) || 10,
+        limit: PAGINATION_ITEMS,
     };
     let searchPagination = {
         page: 1,
-        limit: parseInt(import.meta.env.VITE_PAGINATION_ITEMS, 10) || 10,
+        limit: PAGINATION_ITEMS,
     };
 
     async function handleKeydown() {
@@ -135,6 +138,6 @@
         </a>
     {/each}
 </div>
-{#if pages.length > 1}
+{#if pages > 1}
     <Pagination {pages} />
 {/if}

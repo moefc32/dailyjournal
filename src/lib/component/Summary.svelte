@@ -37,13 +37,19 @@
 <!-- svelte-ignore a11y_missing_attribute -->
 <div class="flex flex-col items-center gap-3 w-full max-w-screen-sm">
     <div class="flex items-center gap-1 w-full">
-        <a href="/" class="btn btn-sm me-auto" title="Back to home page">
+        <a
+            href="/"
+            class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
+            title="Back to home page"
+            aria-disabled={contents.loading}
+        >
             <ArrowLeft size={16} /> Back to Home
         </a>
         {#if contents}
             <button
                 class="btn btn-sm btn-warning"
                 title="Edit this journal"
+                disabled={contents.loading}
                 on:click={() => (window.location.href = `/${contents.id}?edit`)}
             >
                 <Pen size={16} /> Edit
@@ -51,6 +57,7 @@
             <button
                 class="btn btn-sm btn-error text-white"
                 title="Delete this journal"
+                disabled={contents.loading}
                 on:click={() => journal_delete.showModal()}
             >
                 <Trash2 size={16} /> Delete

@@ -7,11 +7,14 @@ import decodeToken from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 import { stripUUID } from '$lib/uuid.js';
 
+const PAGINATION_ITEMS =
+    parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
+
 export async function GET({ cookies, url }) {
     const search = url.searchParams.get('search')?.trim() || undefined;
     const page = parseInt(url.searchParams.get('page'), 10) || 1;
-    const limit = parseInt(url.searchParams.get('limit'), 10)
-        || (parseInt(VITE_PAGINATION_ITEMS, 10) || 10);
+    const limit =
+        parseInt(url.searchParams.get('limit'), 10) || PAGINATION_ITEMS;
     const skip = (page - 1) * limit;
 
     const access_token = cookies.get('access_token');
@@ -22,11 +25,14 @@ export async function GET({ cookies, url }) {
             prisma.journals.findMany({
                 where: {
                     userId: decoded_token?.id,
-                    ...(search ? { title: { contains: search.toLowerCase() } } : {}),
+                    ...(search
+                        ? { title: { contains: search.toLowerCase() } }
+                        : {}
+                    ),
                 },
                 orderBy: { createdAt: 'desc' },
-                skip: 0,
-                take: parseInt(VITE_PAGINATION_ITEMS, 10) || 10,
+                skip,
+                take: PAGINATION_ITEMS,
                 select: {
                     id: true,
                     title: true,

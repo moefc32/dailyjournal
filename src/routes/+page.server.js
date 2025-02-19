@@ -3,8 +3,15 @@ import { redirect } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
 import { stripUUID } from '$lib/uuid.js';
 
-export async function load({ parent }) {
+const PAGINATION_ITEMS =
+    parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
+
+export async function load({ parent, url }) {
     const { userData } = await parent();
+    const page = parseInt(url.searchParams.get('page'), 10) || 1;
+    const limit =
+        parseInt(url.searchParams.get('limit'), 10) || PAGINATION_ITEMS;
+    const skip = (page - 1) * limit;
 
     if (!userData) return;
 
@@ -12,8 +19,8 @@ export async function load({ parent }) {
         prisma.journals.findMany({
             where: { userId: userData.id },
             orderBy: { createdAt: 'desc' },
-            skip: 0,
-            take: parseInt(VITE_PAGINATION_ITEMS, 10) || 10,
+            skip,
+            take: PAGINATION_ITEMS,
             select: {
                 id: true,
                 title: true,
@@ -38,6 +45,7 @@ export async function load({ parent }) {
     return {
         pageTitle: '',
         userData,
+        page,
         contents: userData ? { row, total } : undefined,
     };
 }

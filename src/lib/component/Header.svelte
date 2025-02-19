@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { Settings, LogOut } from 'lucide-svelte';
     import { Notyf } from 'notyf';
 
     import Avatar from './Avatar.svelte';
@@ -45,10 +46,14 @@
         {#if $page.data.userData}
             <ul class="menu menu-horizontal px-1">
                 <li>
-                    <a href="/settings">Settings</a>
+                    <a href="/settings">
+                        <Settings size={12} /> Settings
+                    </a>
                 </li>
                 <li>
-                    <button on:click={() => doLogout()}>Logout</button>
+                    <button on:click={() => doLogout()}>
+                        <LogOut size={12} /> Logout
+                    </button>
                 </li>
             </ul>
         {/if}
