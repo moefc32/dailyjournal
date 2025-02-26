@@ -15,7 +15,7 @@ export default function parseMs(str) {
         d: 86400000,
         w: 604800000,
         y: 31557600000,
-    }
+    };
 
     return Math.round(value * (multipliers[unit] || 1));
 }
