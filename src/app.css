@@ -1,5 +1,8 @@
-@import "tailwindcss";
-@plugin "daisyui";
+@import 'tailwindcss';
+
+@plugin 'daisyui' {
+    exclude: rootscrollgutter;
+}
 
 @import '@fontsource-variable/dm-sans';
 
