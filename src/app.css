@@ -4,7 +4,7 @@
     exclude: rootscrollgutter;
 }
 
-@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/plus-jakarta-sans';
 
 input::-ms-reveal,
 input::-ms-clear {
@@ -12,5 +12,5 @@ input::-ms-clear {
 }
 
 body {
-    font-family: 'DM Sans Variable', sans-serif;
+    font-family: 'Plus Jakarta Sans Variable', sans-serif;
 }
