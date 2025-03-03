@@ -37,7 +37,7 @@
     <div class="flex">
         <a
             href="/"
-            class="site-logo flex items-center ps-11 text-2xl font-semibold h-[40px]"
+            class="flex items-center ps-11 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-[length:40px] text-2xl font-semibold h-[40px]"
         >
             {import.meta.env.VITE_APP_NAME}
         </a>
@@ -59,10 +59,3 @@
         {/if}
     </div>
 </header>
-
-<style>
-    .site-logo {
-        background: url(/favicon.svg) left center no-repeat;
-        background-size: 35px;
-    }
-</style>

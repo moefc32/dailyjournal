@@ -144,7 +144,7 @@
                 {#each journal.files as file, i}
                     <div
                         role="button"
-                        class="relative bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
                         title={`Image attachment ${i + 1}`}
                         on:click={() => {
                             previewImage = URL.createObjectURL(file);

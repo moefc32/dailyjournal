@@ -169,7 +169,7 @@
                 {#each contents.uploaded as file, i}
                     <div
                         role="button"
-                        class="relative bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
                         title={`Uploaded image attachment ${i + 1}`}
                         on:click={() => {
                             previewImage = `/file/${file}`;
@@ -194,13 +194,13 @@
                 {/each}
                 {#if contents.uploaded.length && contents.files.length}
                     <div
-                        class="flex-1 my-3 bg-gray-400 !w-[1px] !min-w-[1px] max-w-[1px]"
+                        class="flex-1 my-3 bg-gray-400 w-[1px] min-w-[1px] max-w-[1px]"
                     ></div>
                 {/if}
                 {#each contents.files as file, i}
                     <div
                         role="button"
-                        class="relative bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
                         title={`New image attachment ${i + 1}`}
                         on:click={() => {
                             previewImage = URL.createObjectURL(file);

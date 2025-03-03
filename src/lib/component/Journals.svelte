@@ -116,8 +116,8 @@
         >
             <div
                 class="{search.keyword
-                    ? 'no-result'
-                    : 'no-data'} flex flex-col justify-end items-center text-gray-700 text-xl h-[135px]"
+                    ? `bg-[url('/no-result.svg')]`
+                    : `bg-[url('/no-data.svg')]`} flex flex-col justify-end items-center bg-top bg-no-repeat bg-[length:180px] text-gray-700 text-xl h-[135px]"
             >
                 {#if search.keyword}
                     <span>No journal found</span>
@@ -151,7 +151,7 @@
                 </div>
                 {#if item.documentations.length}
                     <div
-                        class="relative bg-gray-200 !w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
+                        class="relative bg-gray-200 w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
                     >
                         <img
                             src={`/file/${item.documentations[0].id}`}
@@ -167,15 +167,3 @@
 {#if pages > 1}
     <Pagination {pages} />
 {/if}
-
-<style>
-    .no-result {
-        background: url(/no-result.svg) center top no-repeat;
-        background-size: 180px;
-    }
-
-    .no-data {
-        background: url(/no-data.svg) center top no-repeat;
-        background-size: 180px;
-    }
-</style>

@@ -67,7 +67,7 @@
     <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
         {#if !contents}
             <div
-                class="not-found flex flex-col justify-end items-center text-gray-700 text-xl h-[200px]"
+                class="flex flex-col justify-end items-center bg-[url('/not-found.svg')] bg-top bg-no-repeat bg-[length:180px] text-gray-700 text-xl h-[200px]"
             >
                 Requested journal is not found
             </div>
@@ -90,7 +90,7 @@
                     {#each contents.documentations as file, i}
                         <div
                             role="button"
-                            class="block bg-gray-200 !w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                            class="block bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
                             title={`Image attachment ${i + 1}`}
                             on:click={() => {
                                 previewImage = `/file/${file}`;
@@ -152,10 +152,3 @@
         <button>close</button>
     </form>
 </dialog>
-
-<style>
-    .not-found {
-        background: url(/not-found.svg) center top no-repeat;
-        background-size: 180px;
-    }
-</style>
