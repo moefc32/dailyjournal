@@ -1,5 +1,5 @@
 import prisma from '$lib/server/prisma';
-import { parseUUID, stripUUID } from '$lib/uuid.js';
+import { parseUUID, stripUUID } from '$lib/uuid';
 
 export async function load({ params, parent, url }) {
     const pageTitle = '';

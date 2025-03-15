@@ -1,7 +1,7 @@
 import { VITE_PAGINATION_ITEMS } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
-import { stripUUID } from '$lib/uuid.js';
+import { stripUUID } from '$lib/uuid';
 
 const PAGINATION_ITEMS =
     parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
