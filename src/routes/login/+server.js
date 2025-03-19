@@ -39,42 +39,33 @@ export async function POST({ cookies, request }) {
             where: { email: email.toLowerCase() },
         });
 
-        if (!lookData) {
-            return json({
-                application: VITE_APP_NAME,
-                message: 'Wrong email or password, please try again!',
-            }, {
-                status: 400,
-            });
+        if (lookData) {
+            const passwordMatch = await comparePassword(password, lookData.password);
+
+            if (passwordMatch) {
+                const token = await jwt.sign({ id: lookData.id },
+                    VITE_JWT_SECRET, { expiresIn: VITE_JWT_EXPIRATION || '1h' });
+
+                const maxAge = parseMs(VITE_JWT_EXPIRATION || '1h');
+                cookies.set('access_token', token, {
+                    path: '/',
+                    httpOnly: true,
+                    maxAge,
+                });
+
+                return json({
+                    application: VITE_APP_NAME,
+                    message: 'Login success.',
+                });
+            }
         }
 
-        const passwordMatch = await comparePassword(password, lookData.password);
-
-        if (passwordMatch) {
-            const token = await jwt.sign({ id: lookData.id },
-                VITE_JWT_SECRET, { expiresIn: VITE_JWT_EXPIRATION || '1h' });
-
-            const maxAge = parseMs(VITE_JWT_EXPIRATION || '1h');
-            cookies.set('access_token', token, {
-                path: '/',
-                httpOnly: true,
-                maxAge,
-            });
-
-            return json({
-                application: VITE_APP_NAME,
-                message: 'Login success.',
-            });
-        }
-
-        if (!lookData) {
-            return json({
-                application: VITE_APP_NAME,
-                message: 'Wrong email or password, please try again!',
-            }, {
-                status: 400,
-            });
-        }
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Wrong email or password, please try again!',
+        }, {
+            status: 400,
+        });
     } catch (e) {
         console.error(e);
 
