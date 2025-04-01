@@ -37,7 +37,7 @@
     <div class="flex">
         <a
             href="/"
-            class="flex items-center ps-11 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-[length:40px] text-2xl font-semibold h-[40px]"
+            class="flex items-center ps-11 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-2xl font-semibold h-[35px]"
         >
             {import.meta.env.VITE_APP_NAME}
         </a>
