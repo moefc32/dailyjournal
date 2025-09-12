@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 export async function hashPassword(password) {
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(12);
     return await bcrypt.hash(password, salt);
 }
 
