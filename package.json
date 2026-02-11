@@ -10,25 +10,25 @@
         "prepare": "svelte-kit sync || echo ''"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "^5.3.2",
-        "@sveltejs/kit": "^2.42.2",
+        "@sveltejs/adapter-node": "^5.5.2",
+        "@sveltejs/kit": "^2.50.2",
         "@sveltejs/vite-plugin-svelte": "^5.1.1",
-        "@tailwindcss/vite": "^4.1.13",
+        "@tailwindcss/vite": "^4.1.18",
         "daisyui": "5.0.0",
-        "prisma": "^6.16.2",
-        "svelte": "^5.39.2",
-        "tailwindcss": "^4.1.13",
-        "vite": "^6.3.6"
+        "prisma": "^6.19.2",
+        "svelte": "^5.50.1",
+        "tailwindcss": "^4.1.18",
+        "vite": "^6.4.1"
     },
     "dependencies": {
         "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
         "@prisma/client": "6.5.0",
         "bcrypt": "^5.1.1",
         "dotenv": "^16.6.1",
-        "jsonwebtoken": "^9.0.2",
+        "jsonwebtoken": "^9.0.3",
         "lucide-svelte": "^0.475.0",
         "minio": "^8.0.6",
-        "mysql2": "^3.15.0",
+        "mysql2": "^3.17.0",
         "notyf": "^3.10.0",
         "sharp": "^0.33.5"
     },
