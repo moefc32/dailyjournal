@@ -10,13 +10,13 @@
         "prepare": "svelte-kit sync || echo ''"
     },
     "devDependencies": {
-        "@sveltejs/adapter-node": "^5.5.2",
-        "@sveltejs/kit": "^2.50.2",
+        "@sveltejs/adapter-node": "^5.5.3",
+        "@sveltejs/kit": "^2.51.0",
         "@sveltejs/vite-plugin-svelte": "^5.1.1",
         "@tailwindcss/vite": "^4.1.18",
-        "daisyui": "5.0.0",
+        "daisyui": "5.5.18",
         "prisma": "^6.19.2",
-        "svelte": "^5.50.1",
+        "svelte": "^5.50.3",
         "tailwindcss": "^4.1.18",
         "vite": "^6.4.1"
     },
@@ -26,9 +26,9 @@
         "bcrypt": "^5.1.1",
         "dotenv": "^16.6.1",
         "jsonwebtoken": "^9.0.3",
-        "lucide-svelte": "^0.475.0",
+        "lucide-svelte": "^0.563.0",
         "minio": "^8.0.6",
-        "mysql2": "^3.17.0",
+        "mysql2": "^3.17.1",
         "notyf": "^3.10.0",
         "sharp": "^0.33.5"
     },
