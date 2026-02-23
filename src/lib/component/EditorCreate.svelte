@@ -202,15 +202,19 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<dialog id="image_preview" class="modal modal-bottom sm:modal-middle">
+<dialog id="image_preview" class="modal modal-bottom">
     <form method="dialog">
-        <button class="flex justify-center items-center p-6 w-screen h-screen">
-            <img
-                src={previewImage}
-                class="bg-white max-w-full max-h-full rounded"
-                alt="Documentation"
-                on:click={event => event.preventDefault()}
-            />
+        <button class="w-screen h-screen">
+            <div
+                class="modal-box flex justify-center items-center p-0 bg-transparent shadow-none w-screen h-screen"
+            >
+                <img
+                    src={previewImage}
+                    class="bg-white max-w-full max-h-full rounded"
+                    alt="Documentation"
+                    on:click={event => event.preventDefault()}
+                />
+            </div>
         </button>
     </form>
 </dialog>
