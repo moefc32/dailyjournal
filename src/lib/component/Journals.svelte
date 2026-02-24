@@ -69,14 +69,14 @@
     }
 
     $: pages = search.keyword
-        ? Math.ceil(contents.total / searchPagination.limit)
-        : Math.ceil(contents.total / journalPagination.limit);
+        ? Math.ceil(contents?.total / searchPagination.limit)
+        : Math.ceil(contents?.total / journalPagination.limit);
 </script>
 
 <div class="flex items-center gap-3 w-full max-w-screen-sm">
     <a
         href="/create"
-        class="btn bg-emerald-600 text-white"
+        class="btn btn-primary"
         title="Create new journal"
     >
         <Plus size={16} /> Create New

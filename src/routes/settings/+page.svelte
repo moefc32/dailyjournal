@@ -1,11 +1,8 @@
 <script>
-    import { onMount } from 'svelte';
-    import { Notyf } from 'notyf';
     import axios from 'axios';
+    import notyf from '$lib/notyf';
 
     import Settings from '$lib/component/Settings.svelte';
-
-    let notyf;
 
     export let data;
 
@@ -33,10 +30,6 @@
             notyf.error('Save data failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">

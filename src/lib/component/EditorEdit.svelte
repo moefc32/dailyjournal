@@ -237,34 +237,28 @@
                 rows="5"
                 bind:value={contents.content}
             ></textarea>
-            <div class="flex items-center gap-1 mt-2">
-                <button
-                    class="btn self-start {!contents.title ||
+            <button
+                class="btn btn-primary self-start mt-2"
+                title="Save this journal"
+                disabled={!contents.title ||
                     !contents.content ||
-                    contents.loading
-                        ? 'bg-emerald-700 text-white/50'
-                        : 'bg-emerald-600 text-white'}"
-                    title="Save this journal"
-                    disabled={!contents.title ||
-                        !contents.content ||
-                        contents.loading}
-                    on:click={() => {
-                        saveJournal(
-                            contents.uploaded,
-                            contents.deleted,
-                            contents.files,
-                        );
-                        isLoading = true;
-                    }}
-                >
-                    {#if contents.loading && isLoading}
-                        <span class="loading loading-spinner loading-xs"></span>
-                        Loading...
-                    {:else}
-                        <Check size={16} /> Save
-                    {/if}
-                </button>
-            </div>
+                    contents.loading}
+                on:click={() => {
+                    saveJournal(
+                        contents.uploaded,
+                        contents.deleted,
+                        contents.files,
+                    );
+                    isLoading = true;
+                }}
+            >
+                {#if contents.loading && isLoading}
+                    <span class="loading loading-spinner loading-xs"></span>
+                    Loading...
+                {:else}
+                    <Check size={16} /> Save
+                {/if}
+            </button>
         </div>
     </div>
 </div>

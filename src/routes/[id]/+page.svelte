@@ -1,14 +1,11 @@
 <script>
-    import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
-    import { Notyf } from 'notyf';
+    import { goto } from '$app/navigation';
     import axios from 'axios';
+    import notyf from '$lib/notyf';
 
     import EditorEdit from '$lib/component/EditorEdit.svelte';
     import Summary from '$lib/component/Summary.svelte';
-
-    let notyf;
 
     export let data;
 
@@ -62,10 +59,6 @@
             notyf.error('Delete journal failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">

@@ -1,12 +1,9 @@
 <script>
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
-    import { Notyf } from 'notyf';
     import axios from 'axios';
+    import notyf from '$lib/notyf';
 
     import Register from '$lib/component/Register.svelte';
-
-    let notyf;
 
     export let data;
 
@@ -34,10 +31,6 @@
             notyf.error('Register failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main

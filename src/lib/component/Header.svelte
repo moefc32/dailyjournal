@@ -1,46 +1,39 @@
 <script>
-    import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
     import { Settings, LogOut } from 'lucide-svelte';
-    import { Notyf } from 'notyf';
     import axios from 'axios';
+    import notyf from '$lib/notyf';
 
     import Avatar from './Avatar.svelte';
-
-    let notyf;
 
     async function doLogout() {
         try {
             await axios.delete('/login');
 
-            notyf.success('You are now signed out.');
+            notyf.success('You are now logged out.');
             await goto('/login', { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Logout failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <header
-    class="navbar flex justify-center bg-emerald-600 text-white px-6 h-[60px] fixed top-0 left-0 z-[1000] shadow"
+    class="navbar flex justify-center bg-emerald-600 text-white ps-6 pe-3 h-[60px] fixed top-0 left-0 z-[1000] shadow"
 >
     <div class="flex">
         <a
             href="/"
-            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px]"
+            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px] cursor-pointer"
         >
             {import.meta.env.VITE_APP_NAME}
         </a>
     </div>
-    <div class="flex ms-auto">
+    <div class="flex gap-1 ms-auto text-[16px]">
         {#if $page.data.userData}
-            <ul class="menu menu-horizontal px-1 text-[16px]">
+            <ul class="menu menu-horizontal">
                 <li>
                     <a href="/settings">
                         <Settings size={14} /> Settings

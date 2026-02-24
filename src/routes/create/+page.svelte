@@ -1,12 +1,9 @@
 <script>
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
-    import { Notyf } from 'notyf';
     import axios from 'axios';
+    import notyf from '$lib/notyf';
 
     import EditorCreate from '$lib/component/EditorCreate.svelte';
-
-    let notyf;
 
     let journal = {
         title: '',
@@ -37,10 +34,6 @@
             notyf.error('Create journal failed, please try again!');
         }
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <main class="flex flex-1 flex-col justify-start items-center gap-6 p-6 w-full">

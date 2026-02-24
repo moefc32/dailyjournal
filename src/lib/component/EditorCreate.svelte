@@ -183,11 +183,7 @@
                 bind:value={journal.content}
             ></textarea>
             <button
-                class="btn self-start mt-2 {!journal.title ||
-                !journal.content ||
-                journal.loading
-                    ? 'bg-emerald-700 text-white/50'
-                    : 'bg-emerald-600 text-white'}"
+                class="btn btn-primary self-start mt-2"
                 title="Submit this journal"
                 disabled={!journal.title || !journal.content || journal.loading}
                 on:click={() => submitJournal()}

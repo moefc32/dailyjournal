@@ -71,12 +71,7 @@
         {/if}
     </label>
     <button
-        class="btn mt-2 {(!register.name && !register.email) ||
-        !isValidEmail(register.email) ||
-        !register.password ||
-        register.loading
-            ? 'bg-emerald-700 text-white/50'
-            : 'bg-emerald-600 text-white'}"
+        class="btn btn-primary mt-2"
         title="Register new user account"
         disabled={(!register.name && !register.email) ||
             !isValidEmail(register.email) ||

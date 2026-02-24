@@ -1,11 +1,8 @@
 <script>
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
     import { ArrowLeft, Pen, Trash2, Calendar } from 'lucide-svelte';
-    import { Notyf } from 'notyf';
     import datePrettier from '$lib/datePrettier';
-
-    let notyf;
+    import notyf from '$lib/notyf';
 
     export let contents;
     export let deleteJournal;
@@ -27,10 +24,6 @@
         event.preventDefault();
         scrollContainer.scrollLeft += event.deltaY;
     }
-
-    onMount(async () => {
-        notyf = new Notyf();
-    });
 </script>
 
 <!-- svelte-ignore a11y_interactive_supports_focus -->
@@ -50,7 +43,7 @@
                 class="btn btn-sm btn-warning"
                 title="Edit this journal"
                 disabled={contents.loading}
-                on:click={() => (window.location.href = `/${contents.id}?edit`)}
+                on:click={() => goto(`/${contents.id}?edit`)}
             >
                 <Pen size={16} /> Edit
             </button>

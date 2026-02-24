@@ -16,3 +16,11 @@ input[type="search"]::-webkit-search-cancel-button {
 body {
     font-family: 'Plus Jakarta Sans Variable', sans-serif;
 }
+
+.btn-primary {
+    @apply bg-emerald-600 hover:bg-emerald-700 text-white border-none;
+}
+
+.btn-primary:disabled {
+    @apply bg-emerald-600 text-gray-200/50 saturate-35 border-none;
+}
