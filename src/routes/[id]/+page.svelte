@@ -1,7 +1,9 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import EditorEdit from '$lib/component/EditorEdit.svelte';
     import Summary from '$lib/component/Summary.svelte';
@@ -29,48 +31,30 @@
                 formData.append(`files[]`, file);
             });
 
-            const response = await fetch(`/${contents.id}`, {
-                method: 'PATCH',
-                headers: {
-                    Accept: 'application/json',
-                },
-                body: formData,
-            });
-
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
+            const { data: result } = await axios.patch(
+                `/${contents.id}`,
+                formData,
+            );
+            contents = { ...result.data };
 
             notyf.success('Journal saved successfully.');
-            setTimeout(() => {
-                window.location.href = `/${contents.id}`;
-            }, 1500);
+            goto(`/${contents.id}`, { invalidateAll: true });
         } catch (e) {
-            contents.loading = false;
-
             console.error(e);
             notyf.error('Save contents failed, please try again!');
         }
+
+        contents.loading = false;
     }
 
     async function deleteJournal(id) {
         contents.loading = true;
 
         try {
-            const response = await fetch(`/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) throw new Error();
+            await axios.delete(`/${id}`);
 
             notyf.success('Journal deleted successfully.');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1500);
+            goto('/', { invalidateAll: true });
         } catch (e) {
             contents.loading = false;
 

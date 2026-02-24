@@ -1,8 +1,10 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { Settings, LogOut } from 'lucide-svelte';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import Avatar from './Avatar.svelte';
 
@@ -10,16 +12,10 @@
 
     async function doLogout() {
         try {
-            const response = await fetch('/login', {
-                method: 'DELETE',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            });
+            await axios.delete('/login');
 
-            if (!response.ok) throw new Error();
-            window.location.href = '/login';
+            notyf.success('You are now signed out.');
+            await goto('/login', { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Logout failed, please try again!');
@@ -37,22 +33,22 @@
     <div class="flex">
         <a
             href="/"
-            class="flex items-center ps-11 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-2xl font-semibold h-[35px]"
+            class="flex items-center ps-10 bg-[url('/favicon.svg')] bg-left bg-no-repeat bg-contain text-xl font-semibold h-[32px]"
         >
             {import.meta.env.VITE_APP_NAME}
         </a>
     </div>
     <div class="flex ms-auto">
         {#if $page.data.userData}
-            <ul class="menu menu-horizontal px-1">
+            <ul class="menu menu-horizontal px-1 text-[16px]">
                 <li>
                     <a href="/settings">
-                        <Settings size={12} /> Settings
+                        <Settings size={14} /> Settings
                     </a>
                 </li>
                 <li>
                     <button on:click={() => doLogout()}>
-                        <LogOut size={12} /> Logout
+                        <LogOut size={14} /> Logout
                     </button>
                 </li>
             </ul>

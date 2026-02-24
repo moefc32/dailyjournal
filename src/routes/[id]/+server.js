@@ -99,10 +99,32 @@ export async function PATCH({ params, request }) {
             }),
         ]);
 
+        const contents = await prisma.journals.findUnique({
+            where: { id: parseUUID(id) },
+            select: {
+                title: true,
+                content: true,
+                updatedAt: true,
+                documentations: {
+                    select: { id: true },
+                    orderBy: { order: 'asc' },
+                },
+            },
+        });
+
+        if (Array.isArray(contents?.documentations)) {
+            contents.documentations =
+                contents.documentations.map((item) => item.id);
+        }
+
         return json({
             application: VITE_APP_NAME,
             message: 'Update journal success.',
-            data: { id },
+            data: {
+                ...contents,
+                uploaded: contents.documentations,
+                files: [],
+            },
         });
     } catch (e) {
         console.error(e);

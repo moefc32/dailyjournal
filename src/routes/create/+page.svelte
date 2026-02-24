@@ -1,6 +1,8 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import EditorCreate from '$lib/component/EditorCreate.svelte';
 
@@ -24,22 +26,10 @@
                 formData.append(`files[]`, file);
             });
 
-            const response = await fetch('/create', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                },
-                body: formData,
-            });
-
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
+            const { data: result } = await axios.post('/create', formData);
 
             notyf.success('Journal created successfully.');
-            setTimeout(() => {
-                window.location.href = `/${result.data}`;
-            }, 1500);
+            goto(`/${result.data}`);
         } catch (e) {
             journal.loading = false;
 

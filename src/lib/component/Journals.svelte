@@ -1,5 +1,6 @@
 <script>
     import { Plus, Search, Calendar } from 'lucide-svelte';
+    import axios from 'axios';
     import datePrettier from '$lib/datePrettier';
     import trimText from '$lib/trimText';
 
@@ -39,17 +40,8 @@
                 ...journalPagination,
             }).toString();
 
-            const response = await fetch('/', {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            });
+            const { data: result } = await axios.get(`/?${query}`);
 
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
             contents.row = result.data.row;
             contents.total = result.data.total;
         } catch (e) {
@@ -66,17 +58,8 @@
                 ...searchPagination,
             }).toString();
 
-            const response = await fetch(`/?${query}`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            });
+            const { data: result } = await axios.get(`/?${query}`);
 
-            if (!response.ok) throw new Error();
-
-            const result = await response.json();
             search.results = result.data.row;
             search.loading = false;
         } catch (e) {

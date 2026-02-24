@@ -1,6 +1,8 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import Login from '$lib/component/Login.svelte';
 
@@ -20,18 +22,10 @@
         login.loading = true;
 
         try {
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(login),
-            });
+            await axios.post('/login', login);
 
-            if (!response.ok) throw new Error();
-
-            window.location.href = '/';
+            notyf.success('You have successfully logged in.');
+            await goto('/', { invalidateAll: true });
         } catch (e) {
             login.loading = false;
 

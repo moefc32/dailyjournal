@@ -59,7 +59,12 @@
         {/if}
     </label>
     <button
-        class="btn bg-emerald-600 mt-2 {login.loading || 'text-white'}"
+        class="btn mt-2 {!login.email ||
+        !isValidEmail(login.email) ||
+        !login.password ||
+        login.loading
+            ? 'bg-emerald-700 text-white/50'
+            : 'bg-emerald-600 text-white'}"
         title="Login to application"
         disabled={!login.email ||
             !isValidEmail(login.email) ||

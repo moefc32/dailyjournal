@@ -106,7 +106,6 @@
                 href="/"
                 class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
                 title="Back to home page"
-                aria-disabled={contents.loading}
             >
                 <ArrowLeft size={16} /> Back to Home
             </a>
@@ -115,7 +114,6 @@
                 href={contents.id}
                 class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
                 title="Cancel edit and back to journal detail"
-                aria-disabled={contents.loading}
             >
                 <ArrowLeft size={16} /> Cancel Edit
             </a>
@@ -241,8 +239,11 @@
             ></textarea>
             <div class="flex items-center gap-1 mt-2">
                 <button
-                    class="btn bg-emerald-600 self-start {contents.loading ||
-                        'text-white'}"
+                    class="btn self-start {!contents.title ||
+                    !contents.content ||
+                    contents.loading
+                        ? 'bg-emerald-700 text-white/50'
+                        : 'bg-emerald-600 text-white'}"
                     title="Save this journal"
                     disabled={!contents.title ||
                         !contents.content ||

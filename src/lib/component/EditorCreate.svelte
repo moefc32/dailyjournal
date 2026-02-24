@@ -100,7 +100,6 @@
             href="/"
             class="btn btn-sm {journal.loading && 'btn-disabled'}"
             title="Back to home page"
-            aria-disabled={journal.loading}
         >
             <ArrowLeft size={16} /> Back to Home
         </a>
@@ -184,8 +183,11 @@
                 bind:value={journal.content}
             ></textarea>
             <button
-                class="btn bg-emerald-600 self-start mt-2 {journal.loading ||
-                    'text-white'}"
+                class="btn self-start mt-2 {!journal.title ||
+                !journal.content ||
+                journal.loading
+                    ? 'bg-emerald-700 text-white/50'
+                    : 'bg-emerald-600 text-white'}"
                 title="Submit this journal"
                 disabled={!journal.title || !journal.content || journal.loading}
                 on:click={() => submitJournal()}

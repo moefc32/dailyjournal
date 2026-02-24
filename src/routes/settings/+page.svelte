@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import Settings from '$lib/component/Settings.svelte';
 
@@ -21,16 +22,7 @@
         settings.loading = true;
 
         try {
-            const response = await fetch('/settings', {
-                method: 'PATCH',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(settings),
-            });
-
-            if (!response.ok) throw new Error();
+            await axios.patch('/settings', settings);
 
             notyf.success('Data saved successfully.');
             settings.loading = false;

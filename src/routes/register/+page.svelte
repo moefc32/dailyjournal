@@ -1,6 +1,8 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { Notyf } from 'notyf';
+    import axios from 'axios';
 
     import Register from '$lib/component/Register.svelte';
 
@@ -21,22 +23,10 @@
         register.loading = true;
 
         try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(register),
-            });
-
-            if (!response.ok) throw new Error();
+            await axios.post('/register', register);
 
             notyf.success('New user account registered successfully.');
-
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1500);
+            await goto('/', { invalidateAll: true });
         } catch (e) {
             register.loading = false;
 

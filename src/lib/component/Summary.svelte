@@ -1,4 +1,5 @@
 <script>
+    import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { ArrowLeft, Pen, Trash2, Calendar } from 'lucide-svelte';
     import { Notyf } from 'notyf';
@@ -41,7 +42,6 @@
             href="/"
             class="btn btn-sm me-auto {contents?.loading && 'btn-disabled'}"
             title="Back to home page"
-            aria-disabled={contents?.loading}
         >
             <ArrowLeft size={16} /> Back to Home
         </a>
