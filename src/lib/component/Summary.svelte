@@ -71,7 +71,10 @@
                 </p>
                 <p class="flex items-center gap-1 text-gray-500 text-sm">
                     <Calendar size={12} />
-                    Published on {datePrettier(contents.createdAt)}
+                    Published on {datePrettier(contents.createdAt, {
+                        date: true,
+                        time: true,
+                    })}
                 </p>
             </div>
             {#if contents.documentations.length}
@@ -103,7 +106,10 @@
             {#if contents.updatedAt}
                 <p class="flex items-center gap-1 text-gray-500 text-sm">
                     <Pen size={12} />
-                    Updated on {datePrettier(contents.updatedAt)}
+                    Updated on {datePrettier(contents.updatedAt, {
+                        date: true,
+                        time: true,
+                    })}
                 </p>
             {/if}
         {/if}

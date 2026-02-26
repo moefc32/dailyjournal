@@ -74,11 +74,7 @@
 </script>
 
 <div class="flex items-center gap-3 w-full max-w-screen-sm">
-    <a
-        href="/create"
-        class="btn btn-primary"
-        title="Create new journal"
-    >
+    <a href="/create" class="btn btn-primary" title="Create new journal">
         <Plus size={16} /> Create New
     </a>
     <label class="input ms-auto w-90 max-w-full">
@@ -129,7 +125,10 @@
                     </p>
                     <p class="flex items-center gap-1 text-gray-500 text-sm">
                         <Calendar size={12} />
-                        {datePrettier(item.createdAt)}
+                        {datePrettier(item.createdAt, {
+                            date: true,
+                            time: true,
+                        })}
                     </p>
                 </div>
                 {#if item.documentations.length}

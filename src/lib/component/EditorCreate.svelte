@@ -12,7 +12,10 @@
     let fileInput;
     let dragging = false;
     let previewImage = '';
-    let currentTime = datePrettier(Date.now(), true, false);
+    let currentTime = datePrettier(Date.now(), {
+        date: true,
+        time: true,
+    });
     let scrollContainer;
 
     function handleScroll(event) {
@@ -81,7 +84,10 @@
         document.addEventListener('drop', preventDefaults);
 
         function updateClock() {
-            currentTime = datePrettier(Date.now(), true, false);
+            currentTime = datePrettier(Date.now(), {
+                date: true,
+                time: true,
+            });
         }
 
         updateClock();
