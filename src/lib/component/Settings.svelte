@@ -17,7 +17,7 @@
 </script>
 
 <div
-    class="card flex flex-col gap-2 p-6 bg-white w-full max-w-[450px] shadow-xl"
+    class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[450px] shadow-xl -top-6"
 >
     <h1 class="my-2 text-3xl text-center">Edit Account</h1>
     <input

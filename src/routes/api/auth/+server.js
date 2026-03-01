@@ -84,7 +84,6 @@ export async function POST({ cookies, request }) {
 }
 
 export async function PATCH({ cookies, url, request }) {
-    const id = url.searchParams.get('id');
     const {
         name = '',
         email = '',
