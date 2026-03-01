@@ -20,7 +20,7 @@
 </script>
 
 <div
-    class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-xl"
+    class="card flex flex-col gap-2 my-auto p-6 bg-white w-full max-w-[320px] shadow-xl -top-6"
 >
     <h1 class="my-2 text-3xl text-center">{import.meta.env.VITE_APP_NAME}</h1>
     <input

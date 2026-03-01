@@ -36,7 +36,7 @@
             <ul class="menu menu-horizontal">
                 <li>
                     <a href="/settings">
-                        <Settings size={14} /> Settings
+                        <Settings size={14} /> Edit Account
                     </a>
                 </li>
                 <li>
