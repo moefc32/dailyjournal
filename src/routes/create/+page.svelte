@@ -23,7 +23,7 @@
                 formData.append(`files[]`, file);
             });
 
-            const { data: result } = await axios.post('/create', formData);
+            const { data: result } = await axios.post('/api/journal', formData);
 
             notyf.success('Journal created successfully.');
             goto(`/${result.data}`);

@@ -4,10 +4,15 @@ import {
     VITE_JWT_EXPIRATION,
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import prisma from '$lib/server/prisma';
 import jwt from 'jsonwebtoken';
-import { comparePassword } from '$lib/server/hash';
+import decodeToken from '$lib/server/token';
+import prisma from '$lib/server/prisma';
+import {
+    hashPassword,
+    comparePassword,
+} from '$lib/server/hash';
 import isValidEmail from '$lib/isValidEmail';
+import trimText from '$lib/trimText';
 import parseMs from '$lib/parseMs';
 
 export async function POST({ cookies, request }) {
@@ -65,6 +70,87 @@ export async function POST({ cookies, request }) {
             message: 'Wrong email or password, please try again!',
         }, {
             status: 400,
+        });
+    } catch (e) {
+        console.error(e);
+
+        return json({
+            application: VITE_APP_NAME,
+            message: e,
+        }, {
+            status: 500,
+        });
+    }
+}
+
+export async function PATCH({ cookies, url, request }) {
+    const id = url.searchParams.get('id');
+    const {
+        name = '',
+        email = '',
+        password = '',
+    } = await request.json() || {};
+
+    const access_token = cookies.get('access_token');
+    const decoded_token = decodeToken(access_token);
+
+    try {
+        const data = {};
+        if (name) data.name = trimText(name);
+        if (isValidEmail(email)) data.email = email.toLowerCase();
+        if (password) data.password = await hashPassword(password);
+
+        const query = await prisma.users.update({
+            where: { id: decoded_token?.id },
+            data,
+        });
+
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Update user account success.',
+            data: query,
+        });
+    } catch (e) {
+        console.error(e);
+
+        return json({
+            application: VITE_APP_NAME,
+            message: e,
+        }, {
+            status: 500,
+        });
+    }
+}
+
+export async function PUT({ request }) {
+    const {
+        name = '',
+        email = '',
+        password = '',
+    } = await request.json() || {};
+
+    if (!name || !email || !password) {
+        return json({
+            application: VITE_APP_NAME,
+            message: 'All data must be filled, please try again!',
+        }, {
+            status: 400,
+        });
+    }
+
+    try {
+        const query = await prisma.users.create({
+            data: {
+                name: trimText(name),
+                email: email.toLowerCase(),
+                password: await hashPassword(password),
+            },
+        });
+
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Register new account success.',
+            data: query,
         });
     } catch (e) {
         console.error(e);

@@ -29,7 +29,7 @@
             });
 
             const { data: result } = await axios.patch(
-                `/${contents.id}`,
+                `/api/journal?id=${contents.id}`,
                 formData,
             );
             contents = { ...result.data };
@@ -48,7 +48,7 @@
         contents.loading = true;
 
         try {
-            await axios.delete(`/${id}`);
+            await axios.delete(`/api/journal?id=${id}`);
 
             notyf.success('Journal deleted successfully.');
             goto('/', { invalidateAll: true });

@@ -19,7 +19,7 @@
         login.loading = true;
 
         try {
-            await axios.post('/login', login);
+            await axios.post('/api/auth', login);
 
             notyf.success('You have successfully logged in.');
             await goto('/', { invalidateAll: true });

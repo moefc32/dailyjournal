@@ -19,7 +19,7 @@
         settings.loading = true;
 
         try {
-            await axios.patch('/settings', settings);
+            await axios.patch('/api/auth', settings);
             settings.password = '';
 
             notyf.success('Data saved successfully.');

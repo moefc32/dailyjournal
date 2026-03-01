@@ -40,7 +40,7 @@
                 ...journalPagination,
             }).toString();
 
-            const { data: result } = await axios.get(`/?${query}`);
+            const { data: result } = await axios.get(`/api/journal?${query}`);
 
             contents.row = result.data.row;
             contents.total = result.data.total;
@@ -58,7 +58,7 @@
                 ...searchPagination,
             }).toString();
 
-            const { data: result } = await axios.get(`/?${query}`);
+            const { data: result } = await axios.get(`/api/journal?${query}`);
 
             search.results = result.data.row;
             search.loading = false;

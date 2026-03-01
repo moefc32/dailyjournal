@@ -20,7 +20,7 @@
         register.loading = true;
 
         try {
-            await axios.post('/register', register);
+            await axios.put('/api/auth', register);
 
             notyf.success('New user account registered successfully.');
             await goto('/', { invalidateAll: true });
