@@ -9,7 +9,7 @@
 
     async function doLogout() {
         try {
-            await axios.delete('/login');
+            const { data } = await axios.delete('/login');
 
             notyf.success('You are now logged out.');
             await goto('/login', { invalidateAll: true });

@@ -1,7 +1,6 @@
 import { VITE_PAGINATION_ITEMS } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
-import { stripUUID } from '$lib/uuid';
 
 const PAGINATION_ITEMS =
     parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
@@ -39,7 +38,7 @@ export async function load({ parent, url }) {
 
     const row = getRow.map(item => ({
         ...item,
-        id: stripUUID(item.id),
+        id: item.id,
     }));
 
     return {

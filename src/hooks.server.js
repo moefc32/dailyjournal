@@ -34,11 +34,7 @@ export const handle = async ({ event, resolve }) => {
     if (!isAuthenticated) {
         cookies.delete('access_token', { path: '/' });
 
-        if (!user) {
-            if (!currentPath.startsWith(API_ROUTE)) {
-                throw redirect(303, '/login');
-            }
-
+        if (!user && currentPath.startsWith(API_ROUTE)) {
             return resolve(event);
         }
 

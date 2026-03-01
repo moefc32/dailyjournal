@@ -20,6 +20,7 @@
 
         try {
             await axios.patch('/settings', settings);
+            settings.password = '';
 
             notyf.success('Data saved successfully.');
             settings.loading = false;

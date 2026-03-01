@@ -8,7 +8,6 @@ import { uploadMinio } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
 import sharp from 'sharp';
 import trimText from '$lib/trimText';
-import { stripUUID } from '$lib/uuid.js';
 
 const MAX_IMAGE_DIMENSION = 1200;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
@@ -95,7 +94,7 @@ export async function POST({ cookies, request }) {
         return json({
             application: VITE_APP_NAME,
             message: 'Create new journal success.',
-            data: stripUUID(query.id),
+            data: query.id,
         });
     } catch (e) {
         console.error(e);

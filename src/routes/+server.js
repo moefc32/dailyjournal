@@ -5,7 +5,6 @@ import {
 import { json } from '@sveltejs/kit';
 import decodeToken from '$lib/server/token';
 import prisma from '$lib/server/prisma';
-import { stripUUID } from '$lib/uuid.js';
 
 const PAGINATION_ITEMS =
     parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
@@ -51,7 +50,7 @@ export async function GET({ cookies, url }) {
 
         const row = getRow.map(item => ({
             ...item,
-            id: stripUUID(item.id),
+            id: item.id,
         }));
 
         return json({

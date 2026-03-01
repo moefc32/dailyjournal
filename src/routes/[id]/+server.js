@@ -10,7 +10,6 @@ import {
 } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
 import trimText from '$lib/trimText';
-import { parseUUID } from '$lib/uuid.js';
 
 const MAX_IMAGE_DIMENSION = 1200;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
@@ -33,7 +32,7 @@ export async function PATCH({ params, request }) {
         data.updatedAt = new Date();
 
         await prisma.journals.update({
-            where: { id: parseUUID(id) },
+            where: { id },
             data,
         });
 
@@ -57,7 +56,7 @@ export async function PATCH({ params, request }) {
                 const order = i + 1 + documentations.length;
                 const newFile = await prisma.documentations.create({
                     data: {
-                        journalId: parseUUID(id),
+                        journalId: id,
                         order,
                     },
                     select: { id: true },
@@ -100,8 +99,9 @@ export async function PATCH({ params, request }) {
         ]);
 
         const contents = await prisma.journals.findUnique({
-            where: { id: parseUUID(id) },
+            where: { id },
             select: {
+                id: true,
                 title: true,
                 content: true,
                 updatedAt: true,
@@ -152,14 +152,14 @@ export async function DELETE({ params }) {
 
     try {
         const files = await prisma.documentations.findMany({
-            where: { journalId: parseUUID(id) },
+            where: { journalId: id },
             select: { id: true },
         });
 
         await Promise.all(files.map((file) => deleteMinio(file.id)));
 
         const query = await prisma.journals.delete({
-            where: { id: parseUUID(id) },
+            where: { id },
         });
 
         return json({

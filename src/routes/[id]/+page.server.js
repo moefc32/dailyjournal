@@ -1,5 +1,4 @@
 import prisma from '$lib/server/prisma';
-import { parseUUID, stripUUID } from '$lib/uuid';
 
 export async function load({ params, parent, url }) {
     const pageTitle = '';
@@ -8,7 +7,7 @@ export async function load({ params, parent, url }) {
     const edit = url.searchParams.has('edit');
 
     const contents = await prisma.journals.findUnique({
-        where: { id: parseUUID(id) },
+        where: { id },
         include: {
             documentations: {
                 select: { id: true },
@@ -35,7 +34,7 @@ export async function load({ params, parent, url }) {
         edit_mode: edit,
         contents: {
             ...contents,
-            id: stripUUID(contents?.id),
+            id: contents?.id,
             uploaded: contents?.documentations,
             deleted: [],
             files: [],
