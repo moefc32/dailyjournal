@@ -5,7 +5,7 @@ import {
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
-import decodeToken from '$lib/server/token';
+import token from '$lib/server/token';
 import prisma from '$lib/server/prisma';
 import {
     hashPassword,
@@ -48,15 +48,11 @@ export async function POST({ cookies, request }) {
             const passwordMatch = await comparePassword(password, lookData.password);
 
             if (passwordMatch) {
-                const token = await jwt.sign({ id: lookData.id },
-                    VITE_JWT_SECRET, { expiresIn: VITE_JWT_EXPIRATION || '1h' });
+                const jwtToken = token.sign({ id: lookData.id },
+                    VITE_JWT_EXPIRATION || '1h');
 
                 const maxAge = parseMs(VITE_JWT_EXPIRATION || '1h');
-                cookies.set('access_token', token, {
-                    path: '/',
-                    httpOnly: true,
-                    maxAge,
-                });
+                token.set(cookies, 'access_token', jwtToken, { maxAge });
 
                 return json({
                     application: VITE_APP_NAME,
@@ -90,8 +86,8 @@ export async function PATCH({ cookies, url, request }) {
         password = '',
     } = await request.json() || {};
 
-    const access_token = cookies.get('access_token');
-    const decoded_token = decodeToken(access_token);
+    const access_token = cookies.get(token.access);
+    const decoded_token = token.decode(access_token);
 
     try {
         const data = {};
@@ -165,7 +161,7 @@ export async function PUT({ request }) {
 
 export async function DELETE({ cookies }) {
     try {
-        cookies.delete('access_token', { path: '/', });
+        token.purge(cookies, 'access_token');
 
         return json({
             application: VITE_APP_NAME,

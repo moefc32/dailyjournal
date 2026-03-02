@@ -10,7 +10,7 @@ import {
     deleteMinio,
 } from '$lib/server/minio';
 import prisma from '$lib/server/prisma';
-import decodeToken from '$lib/server/token';
+import token from '$lib/server/token';
 import trimText from '$lib/trimText';
 
 const PAGINATION_ITEMS =
@@ -27,8 +27,8 @@ export async function GET({ cookies, url }) {
         parseInt(url.searchParams.get('limit'), 10) || PAGINATION_ITEMS;
     const skip = (page - 1) * limit;
 
-    const access_token = cookies.get('access_token');
-    const decoded_token = decodeToken(access_token);
+    const access_token = cookies.get(token.access);
+    const decoded_token = token.decode(access_token);
 
     try {
         const [getRow, total] = await Promise.all([
@@ -87,8 +87,8 @@ export async function POST({ cookies, request }) {
     const content = trimText(formData.get('content'));
     const files = formData.getAll('files[]').slice(0, IMAGE_UPLOAD_LIMIT);
 
-    const access_token = cookies.get('access_token');
-    const decoded_token = decodeToken(access_token);
+    const access_token = cookies.get(token.access);
+    const decoded_token = token.decode(access_token);
 
     if (!title || !content) {
         return json({

@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import { validateToken } from '$lib/server/token';
 import { checkIsUserExists } from '$lib/server/prisma';
+import token from '$lib/server/token';
 
 const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login', '/register'];
@@ -13,7 +13,7 @@ function isRouteMatch(routes, path) {
 export const handle = async ({ event, resolve }) => {
     const { cookies, url } = event;
     const currentPath = url.pathname;
-    const isTokenValid = validateToken(cookies);
+    const isTokenValid = token.validate(cookies);
 
     const lang = cookies.get('lang');
     const validLang = lang && ['en', 'id'].includes(lang);
@@ -36,7 +36,10 @@ export const handle = async ({ event, resolve }) => {
     }
 
     if (!isAuthenticated) {
-        cookies.delete('access_token', { path: '/' });
+        token.purge(cookies, [
+            'access_token',
+            'refresh_token',
+        ]);
 
         if (
             isRouteMatch(PUBLIC_ROUTES, currentPath) ||
