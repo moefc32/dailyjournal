@@ -29,7 +29,7 @@ export async function load({ params, parent, url }) {
     }
 
     return {
-        pageTitle,
+        pageTitle: edit ? 'Edit Journal' : contents.title,
         userData,
         edit_mode: edit,
         contents: {

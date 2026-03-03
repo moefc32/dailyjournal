@@ -26,6 +26,19 @@ export const handle = async ({ event, resolve }) => {
     }
 
     event.locals.lang = validLang ? lang : 'en';
+    event.locals.publicRoutes = PUBLIC_ROUTES;
+    event.locals.unauthRoutes = UNAUTH_ROUTES;
+
+    if (isTokenValid) {
+        cookies.set('__session_active', '1', {
+            path: '/',
+            httpOnly: false,
+        });
+    } else {
+        cookies.delete('__session_active', {
+            path: '/',
+        });
+    }
 
     let user = null;
     let isAuthenticated = false;
