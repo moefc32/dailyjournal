@@ -26,7 +26,7 @@
             const { data: result } = await axios.post('/api/journal', formData);
 
             notyf.success('Journal created successfully.');
-            goto(`/${result.data}`);
+            await goto(`/${result.data}`, { invalidateAll: true });
         } catch (e) {
             journal.loading = false;
 

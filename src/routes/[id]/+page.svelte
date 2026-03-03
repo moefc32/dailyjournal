@@ -35,7 +35,7 @@
             contents = { ...result.data };
 
             notyf.success('Journal saved successfully.');
-            goto(`/${contents.id}`, { invalidateAll: true });
+            await goto(`/${contents.id}`, { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Save contents failed, please try again!');
@@ -51,7 +51,7 @@
             await axios.delete(`/api/journal?id=${id}`);
 
             notyf.success('Journal deleted successfully.');
-            goto('/', { invalidateAll: true });
+            await goto('/', { invalidateAll: true });
         } catch (e) {
             contents.loading = false;
 
