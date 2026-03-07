@@ -2,14 +2,14 @@
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { Settings, LogOut } from 'lucide-svelte';
-    import axios from 'axios';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
 
     import Avatar from './Avatar.svelte';
 
     async function doLogout() {
         try {
-            const { data } = await axios.delete('/api/auth');
+            await ky.delete('/api/auth');
 
             notyf.success('You are now logged out.');
             await goto('/login', { invalidateAll: true });

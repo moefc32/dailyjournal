@@ -16,14 +16,14 @@ export async function load({ parent, url }) {
 
     const [getRow, total] = await Promise.all([
         prisma.journals.findMany({
-            where: { userId: userData.id },
-            orderBy: { createdAt: 'desc' },
+            where: { user_id: userData.id },
+            orderBy: { created_at: 'desc' },
             skip,
             take: PAGINATION_ITEMS,
             select: {
                 id: true,
                 title: true,
-                createdAt: true,
+                created_at: true,
                 documentations: {
                     select: { id: true },
                     orderBy: { order: 'asc' },
@@ -32,7 +32,7 @@ export async function load({ parent, url }) {
             },
         }),
         prisma.journals.count({
-            where: { userId: userData.id },
+            where: { user_id: userData.id },
         }),
     ]);
 

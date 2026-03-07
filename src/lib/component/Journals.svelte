@@ -1,6 +1,6 @@
 <script>
     import { Plus, Search, Calendar } from 'lucide-svelte';
-    import axios from 'axios';
+    import ky from 'ky';
     import datePrettier from '$lib/datePrettier';
     import trimText from '$lib/trimText';
 
@@ -40,7 +40,11 @@
                 ...journalPagination,
             }).toString();
 
-            const { data: result } = await axios.get(`/api/journal?${query}`);
+            const result = await ky
+                .get('/api/journal', {
+                    searchParams: query,
+                })
+                .json();
 
             contents.row = result.data.row;
             contents.total = result.data.total;
@@ -58,7 +62,11 @@
                 ...searchPagination,
             }).toString();
 
-            const { data: result } = await axios.get(`/api/journal?${query}`);
+            const result = await ky
+                .get('/api/journal', {
+                    searchParams: query,
+                })
+                .json();
 
             search.results = result.data.row;
             search.loading = false;
@@ -125,7 +133,7 @@
                     </p>
                     <p class="flex items-center gap-1 text-gray-500 text-sm">
                         <Calendar size={12} />
-                        {datePrettier(item.createdAt, {
+                        {datePrettier(item.created_at, {
                             date: true,
                             time: true,
                         })}

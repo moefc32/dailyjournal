@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 export default prisma;
 
-export async function checkIsUserExists(userId) {
-    if (!userId) return false;
+export async function checkIsUserExists(id) {
+    if (!id) return false;
 
     const user = await prisma.users.findUnique({
-        where: { id: userId },
+        where: { id },
         select: { id: true },
     });
 

@@ -34,19 +34,19 @@ export async function GET({ cookies, url }) {
         const [getRow, total] = await Promise.all([
             prisma.journals.findMany({
                 where: {
-                    userId: decoded_token?.id,
+                    user_id: decoded_token?.id,
                     ...(search
                         ? { title: { contains: search.toLowerCase() } }
                         : {}
                     ),
                 },
-                orderBy: { createdAt: 'desc' },
+                orderBy: { created_at: 'desc' },
                 skip,
                 take: PAGINATION_ITEMS,
                 select: {
                     id: true,
                     title: true,
-                    createdAt: true,
+                    created_at: true,
                     documentations: {
                         select: { id: true },
                         orderBy: { order: 'asc' },
@@ -55,7 +55,7 @@ export async function GET({ cookies, url }) {
                 },
             }),
             prisma.journals.count({
-                where: { userId: decoded_token?.id },
+                where: { user_id: decoded_token?.id },
             }),
         ]);
 
@@ -104,7 +104,7 @@ export async function POST({ cookies, request }) {
             data: {
                 title,
                 content,
-                userId: decoded_token?.id,
+                user_id: decoded_token?.id,
             },
             select: { id: true },
         });
@@ -117,7 +117,7 @@ export async function POST({ cookies, request }) {
 
                 const newFile = await prisma.documentations.create({
                     data: {
-                        journalId: query.id,
+                        journal_id: query.id,
                         order: i + 1,
                     },
                     select: { id: true },
@@ -188,7 +188,7 @@ export async function PATCH({ request, url }) {
         const data = {};
         if (title) data.title = title;
         if (content) data.content = content;
-        data.updatedAt = new Date();
+        data.updated_at = new Date();
 
         await prisma.journals.update({
             where: { id },
@@ -215,7 +215,7 @@ export async function PATCH({ request, url }) {
                 const order = i + 1 + documentations.length;
                 const newFile = await prisma.documentations.create({
                     data: {
-                        journalId: id,
+                        journal_id: id,
                         order,
                     },
                     select: { id: true },
@@ -263,7 +263,8 @@ export async function PATCH({ request, url }) {
                 id: true,
                 title: true,
                 content: true,
-                updatedAt: true,
+                created_at: true,
+                updated_at: true,
                 documentations: {
                     select: { id: true },
                     orderBy: { order: 'asc' },
@@ -311,7 +312,7 @@ export async function DELETE({ url }) {
 
     try {
         const files = await prisma.documentations.findMany({
-            where: { journalId: id },
+            where: { journal_id: id },
             select: { id: true },
         });
 

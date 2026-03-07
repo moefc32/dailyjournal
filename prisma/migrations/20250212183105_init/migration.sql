@@ -25,7 +25,7 @@ CREATE TABLE `Journals` (
 -- CreateTable
 CREATE TABLE `Documentations` (
     `id` CHAR(36) NOT NULL,
-    `journalId` CHAR(36) NOT NULL,
+    `journal_id` CHAR(36) NOT NULL,
     `order` TINYINT NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -35,4 +35,4 @@ CREATE TABLE `Documentations` (
 ALTER TABLE `Journals` ADD CONSTRAINT `Journals_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Documentations` ADD CONSTRAINT `Documentations_journalId_fkey` FOREIGN KEY (`journalId`) REFERENCES `Journals`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Documentations` ADD CONSTRAINT `Documentations_journal_id_fkey` FOREIGN KEY (`journal_id`) REFERENCES `Journals`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

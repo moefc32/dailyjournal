@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
-    import axios from 'axios';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
 
     import EditorEdit from '$lib/component/EditorEdit.svelte';
@@ -28,11 +28,14 @@
                 formData.append(`files[]`, file);
             });
 
-            const { data: result } = await axios.patch(
-                `/api/journal?id=${contents.id}`,
-                formData,
-            );
+            const result = await ky
+                .patch(`/api/journal`, {
+                    searchParams: { id: contents.id },
+                    body: formData,
+                })
+                .json();
             contents = { ...result.data };
+            console.log({ data: result.data });
 
             notyf.success('Journal saved successfully.');
             await goto(`/${contents.id}`, { invalidateAll: true });
@@ -48,7 +51,9 @@
         contents.loading = true;
 
         try {
-            await axios.delete(`/api/journal?id=${id}`);
+            await ky.delete('/api/journal', {
+                searchParams: { id },
+            });
 
             notyf.success('Journal deleted successfully.');
             await goto('/', { invalidateAll: true });

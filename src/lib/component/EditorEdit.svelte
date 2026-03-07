@@ -138,7 +138,7 @@
             />
             <div class="flex items-center gap-1 text-gray-500 text-sm">
                 <Calendar size={12} />
-                Published on {datePrettier(contents.createdAt, {
+                Published on {datePrettier(contents.created_at, {
                     date: true,
                     time: true,
                 })}

@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import axios from 'axios';
+    import ky from 'ky';
     import notyf from '$lib/notyf';
 
     import EditorCreate from '$lib/component/EditorCreate.svelte';
@@ -23,7 +23,11 @@
                 formData.append(`files[]`, file);
             });
 
-            const { data: result } = await axios.post('/api/journal', formData);
+            const result = await ky
+                .post('/api/journal', {
+                    body: formData,
+                })
+                .json();
 
             notyf.success('Journal created successfully.');
             await goto(`/${result.data}`, { invalidateAll: true });
