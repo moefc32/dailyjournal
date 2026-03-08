@@ -111,7 +111,7 @@
             </a>
         {:else}
             <a
-                href={contents.id}
+                href={contents._id}
                 class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
                 title="Cancel edit and back to journal detail"
             >
@@ -170,7 +170,7 @@
                 {#each contents.uploaded as file, i}
                     <div
                         role="button"
-                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
                         title={`Uploaded image attachment ${i + 1}`}
                         on:click={() => {
                             previewImage = `/file/${file}`;
@@ -201,7 +201,7 @@
                 {#each contents.files as file, i}
                     <div
                         role="button"
-                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                        class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
                         title={`New image attachment ${i + 1}`}
                         on:click={() => {
                             previewImage = URL.createObjectURL(file);
@@ -295,7 +295,7 @@
                 <button
                     class="btn btn-error text-white"
                     on:click={() => {
-                        deleteJournal(contents.id);
+                        deleteJournal(contents._id);
                     }}
                 >
                     Delete

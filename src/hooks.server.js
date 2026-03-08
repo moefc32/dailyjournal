@@ -1,6 +1,8 @@
 import { redirect } from '@sveltejs/kit';
-import { checkIsUserExists } from '$lib/server/prisma';
+import { initMongoDB, checkIsUserExists } from '$lib/server/db/mongoose';
 import token from '$lib/server/token';
+
+initMongoDB();
 
 const PUBLIC_ROUTES = [];
 const UNAUTH_ROUTES = ['/login', '/register'];

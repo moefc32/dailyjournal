@@ -30,7 +30,7 @@
 
             const result = await ky
                 .patch(`/api/journal`, {
-                    searchParams: { id: contents.id },
+                    searchParams: { id: contents._id },
                     body: formData,
                 })
                 .json();
@@ -38,7 +38,7 @@
             console.log({ data: result.data });
 
             notyf.success('Journal saved successfully.');
-            await goto(`/${contents.id}`, { invalidateAll: true });
+            await goto(`/${contents._id}`, { invalidateAll: true });
         } catch (e) {
             console.error(e);
             notyf.error('Save contents failed, please try again!');

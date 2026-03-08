@@ -1,5 +1,5 @@
 import token from '$lib/server/token';
-import prisma from '$lib/server/prisma';
+import Users from '$lib/server/db/model/users';
 
 export async function load({ cookies, locals }) {
     const routes = {
@@ -11,14 +11,15 @@ export async function load({ cookies, locals }) {
 
     if (!decoded_token) return { ...routes };
 
-    const userData = await prisma.users.findUnique({
-        where: { id: decoded_token?.id },
-    });
-
-    if (userData) delete userData.password;
+    const userData = await Users
+        .findById(decoded_token?.id)
+        .select('-password').lean();
 
     return {
         ...routes,
-        userData,
+        userData: userData && {
+            ...userData,
+            _id: userData._id.toString(),
+        },
     };
 }

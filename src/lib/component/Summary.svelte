@@ -43,7 +43,7 @@
                 class="btn btn-sm btn-warning"
                 title="Edit this journal"
                 disabled={contents.loading}
-                on:click={() => goto(`/${contents.id}?edit`)}
+                on:click={() => goto(`/${contents._id}?edit`)}
             >
                 <Pen size={16} /> Edit
             </button>
@@ -77,7 +77,7 @@
                     })}
                 </p>
             </div>
-            {#if contents.documentations.length}
+            {#if contents.documentations?.length}
                 <div
                     class="flex gap-3 overflow-x-auto"
                     bind:this={scrollContainer}
@@ -86,7 +86,7 @@
                     {#each contents.documentations as file, i}
                         <div
                             role="button"
-                            class="block bg-gray-200 w-24 min-w-24 aspect-5/4 rounded-lg overflow-hidden cursor-pointer"
+                            class="block bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
                             title={`Image attachment ${i + 1}`}
                             on:click={() => {
                                 previewImage = `/file/${file}`;
@@ -103,7 +103,7 @@
                 <hr class="mt-3 mb-0 bg-gray-400 h-[1px] border-0" />
             {/if}
             <p>{contents.content}</p>
-            {#if contents.updated_at}
+            {#if contents.created_at.toString() !== contents.updated_at.toString()}
                 <p class="flex items-center gap-1 text-gray-500 text-sm">
                     <Pen size={12} />
                     Updated on {datePrettier(contents.updated_at, {
@@ -144,7 +144,7 @@
                 <button class="btn">Cancel</button>
                 <button
                     class="btn btn-error text-white"
-                    on:click={() => deleteJournal(contents.id)}
+                    on:click={() => deleteJournal(contents._id)}
                 >
                     Delete
                 </button>

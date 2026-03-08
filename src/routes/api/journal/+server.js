@@ -4,19 +4,20 @@ import {
     VITE_PAGINATION_ITEMS,
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import mongoose from 'mongoose';
 import sharp from 'sharp';
 import {
     uploadMinio,
     deleteMinio,
 } from '$lib/server/minio';
-import prisma from '$lib/server/prisma';
+import Journals from '$lib/server/db/model/journals';
 import token from '$lib/server/token';
 import trimText from '$lib/trimText';
 
 const PAGINATION_ITEMS =
     parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
 const MAX_IMAGE_DIMENSION = 1200;
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const IMAGE_UPLOAD_LIMIT =
     parseInt(import.meta.env.VITE_IMAGE_UPLOAD_LIMIT, 10) || 10;
 
@@ -32,36 +33,35 @@ export async function GET({ cookies, url }) {
 
     try {
         const [getRow, total] = await Promise.all([
-            prisma.journals.findMany({
-                where: {
-                    user_id: decoded_token?.id,
-                    ...(search
-                        ? { title: { contains: search.toLowerCase() } }
-                        : {}
-                    ),
-                },
-                orderBy: { created_at: 'desc' },
-                skip,
-                take: PAGINATION_ITEMS,
-                select: {
-                    id: true,
-                    title: true,
-                    created_at: true,
-                    documentations: {
-                        select: { id: true },
-                        orderBy: { order: 'asc' },
-                        take: 1,
-                    },
-                },
-            }),
-            prisma.journals.count({
-                where: { user_id: decoded_token?.id },
+            Journals.find({
+                user_id: decoded_token?.id,
+                ...(search ? {
+                    title: {
+                        $regex: search,
+                        $options: 'i',
+                    }
+                } : {})
+            })
+                .select('title created_at')
+                .slice('documentations', 1)
+                .sort({ created_at: -1 })
+                .skip(skip)
+                .limit(PAGINATION_ITEMS)
+                .lean(),
+            Journals.countDocuments({
+                user_id: decoded_token?.id,
+                ...(search ? {
+                    title: {
+                        $regex: search,
+                        $options: 'i',
+                    }
+                } : {})
             }),
         ]);
 
-        const row = getRow.map(item => ({
+        const row = getRow.map((item) => ({
             ...item,
-            id: item.id,
+            _id: item._id.toString(),
         }));
 
         return json({
@@ -100,28 +100,14 @@ export async function POST({ cookies, request }) {
     }
 
     try {
-        const query = await prisma.journals.create({
-            data: {
-                title,
-                content,
-                user_id: decoded_token?.id,
-            },
-            select: { id: true },
-        });
+        const documentationIds = files
+            .map(() => new mongoose.Types.ObjectId().toString());
 
         await Promise.all(
             files.map(async (file, i) => {
                 if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
                     throw new Error(`Unsupported file type: ${file.type}`);
                 }
-
-                const newFile = await prisma.documentations.create({
-                    data: {
-                        journal_id: query.id,
-                        order: i + 1,
-                    },
-                    select: { id: true },
-                });
 
                 const fileBuffer = Buffer.from(await file.arrayBuffer());
                 const image = sharp(fileBuffer);
@@ -142,10 +128,7 @@ export async function POST({ cookies, request }) {
                 }
 
                 optimizedBuffer = await sharp(optimizedBuffer)
-                    .webp({
-                        quality: 75,
-                        effort: 6,
-                    })
+                    .webp({ quality: 75, effort: 6 })
                     .toBuffer();
 
                 await uploadMinio({
@@ -154,14 +137,21 @@ export async function POST({ cookies, request }) {
                     arrayBuffer: async function () {
                         return this.buffer;
                     },
-                }, '', newFile.id);
+                }, '', documentationIds[i]);
             })
         );
+
+        const query = await Journals.create({
+            title,
+            content,
+            user_id: decoded_token?.id,
+            documentations: documentationIds,
+        });
 
         return json({
             application: VITE_APP_NAME,
             message: 'Create new journal success.',
-            data: query.id,
+            data: query._id,
         });
     } catch (e) {
         console.error(e);
@@ -190,98 +180,60 @@ export async function PATCH({ request, url }) {
         if (content) data.content = content;
         data.updated_at = new Date();
 
-        await prisma.journals.update({
-            where: { id },
-            data,
-        });
+        const newFileIds =
+            files.map(() => new mongoose.Types.ObjectId().toString());
 
         await Promise.all([
-            ...documentations.map(async (image, i) => {
-                const newFile = await prisma.documentations.update({
-                    where: { id: image },
-                    data: { order: i + 1 },
-                });
-            }),
-            ...deleted.map(async (image, i) => {
-                prisma.documentations.delete({
-                    where: { id: image },
-                }).then(() => deleteMinio(image))
-            }),
+            // Cleanup Minio for deleted files
+            ...deleted.map((fileId) => deleteMinio(fileId)),
+
+            // Process and upload new files to Minio
             ...files.map(async (file, i) => {
                 if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
                     throw new Error(`Unsupported file type: ${file.type}`);
                 }
-
-                const order = i + 1 + documentations.length;
-                const newFile = await prisma.documentations.create({
-                    data: {
-                        journal_id: id,
-                        order,
-                    },
-                    select: { id: true },
-                });
 
                 const fileBuffer = Buffer.from(await file.arrayBuffer());
                 const image = sharp(fileBuffer);
                 const metadata = await image.metadata();
 
                 let optimizedBuffer = fileBuffer;
-                if (metadata.width > MAX_IMAGE_DIMENSION
-                    || metadata.height > MAX_IMAGE_DIMENSION) {
+                if (metadata.width > MAX_IMAGE_DIMENSION || metadata.height > MAX_IMAGE_DIMENSION) {
                     optimizedBuffer = await image.resize({
-                        width: metadata.width > MAX_IMAGE_DIMENSION
-                            ? MAX_IMAGE_DIMENSION
-                            : undefined,
-                        height: metadata.height > MAX_IMAGE_DIMENSION
-                            ? MAX_IMAGE_DIMENSION
-                            : undefined,
+                        width: metadata.width > MAX_IMAGE_DIMENSION ? MAX_IMAGE_DIMENSION : undefined,
+                        height: metadata.height > MAX_IMAGE_DIMENSION ? MAX_IMAGE_DIMENSION : undefined,
                         fit: 'inside',
                     }).toBuffer();
                 }
 
                 optimizedBuffer = await sharp(optimizedBuffer)
-                    .webp({
-                        quality: 75,
-                        effort: 6,
-                    })
+                    .webp({ quality: 75, effort: 6 })
                     .toBuffer();
 
                 await uploadMinio({
                     buffer: optimizedBuffer,
                     type: 'image/webp',
-                    arrayBuffer: async function () {
-                        return this.buffer;
-                    },
-                }, '', newFile.id);
-                return newFile.id;
-            }),
+                    arrayBuffer: async function () { return this.buffer; },
+                }, '', newFileIds[i]);
+            })
         ]);
 
-        const contents = await prisma.journals.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                title: true,
-                content: true,
-                created_at: true,
-                updated_at: true,
-                documentations: {
-                    select: { id: true },
-                    orderBy: { order: 'asc' },
-                },
-            },
-        });
+        // 2. Combine existing documentations and new IDs into the final array
+        data.documentations = [...documentations, ...newFileIds];
 
-        if (Array.isArray(contents?.documentations)) {
-            contents.documentations =
-                contents.documentations.map((item) => item.id);
-        }
+        // 3. Perform the update
+        const contents = await Journals.findByIdAndUpdate(
+            id,
+            { $set: data },
+            { new: true, lean: true }
+        );
 
         return json({
             application: VITE_APP_NAME,
             message: 'Update journal success.',
             data: {
                 ...contents,
+                _id: contents._id.toString(),
                 uploaded: contents.documentations,
                 files: [],
             },
@@ -311,21 +263,20 @@ export async function DELETE({ url }) {
     }
 
     try {
-        const files = await prisma.documentations.findMany({
-            where: { journal_id: id },
-            select: { id: true },
-        });
+        const journal = await Journals.findById(id)
+            .select('documentations').lean();
 
-        await Promise.all(files.map((file) => deleteMinio(file.id)));
+        if (journal && journal.documentations) {
+            await Promise.all(journal.documentations.map(
+                (fileId) => deleteMinio(fileId))
+            );
+        }
 
-        const query = await prisma.journals.delete({
-            where: { id },
-        });
+        await Journals.findByIdAndDelete(id);
 
         return json({
             application: VITE_APP_NAME,
             message: 'Delete journal success.',
-            data: query,
         });
     } catch (e) {
         console.error(e);

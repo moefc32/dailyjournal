@@ -123,7 +123,7 @@
     {:else}
         {#each search.keyword ? search.results : contents.row as item, i}
             <a
-                href={`/${item.id}`}
+                href={`/${item._id}`}
                 class="card flex flex-row gap-4 p-6 bg-white w-full shadow-xl"
                 title={item.title}
             >
@@ -139,12 +139,12 @@
                         })}
                     </p>
                 </div>
-                {#if item.documentations.length}
+                {#if item.thumb}
                     <div
-                        class="relative bg-gray-200 w-20 min-w-20 aspect-5/4 rounded-lg overflow-hidden"
+                        class="relative bg-gray-200 w-20 min-w-20 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden"
                     >
                         <img
-                            src={`/file/${item.documentations[0].id}`}
+                            src={`/file/${item.thumb}`}
                             class="object-cover w-full h-full"
                             alt="Visual bookmark"
                         />

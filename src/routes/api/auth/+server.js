@@ -6,7 +6,7 @@ import {
 import { json } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 import token from '$lib/server/token';
-import prisma from '$lib/server/prisma';
+import Users from '$lib/server/db/model/users';
 import {
     hashPassword,
     comparePassword,
@@ -40,15 +40,15 @@ export async function POST({ cookies, request }) {
     }
 
     try {
-        const lookData = await prisma.users.findUnique({
-            where: { email: email.toLowerCase() },
-        });
+        const lookData = await Users.findOne({
+            email: email.toLowerCase(),
+        }).lean();
 
         if (lookData) {
             const passwordMatch = await comparePassword(password, lookData.password);
 
             if (passwordMatch) {
-                const jwtToken = token.sign({ id: lookData.id },
+                const jwtToken = token.sign({ id: lookData._id.toString() },
                     VITE_JWT_EXPIRATION || '1h');
 
                 const maxAge = parseMs(VITE_JWT_EXPIRATION || '1h');
@@ -95,15 +95,16 @@ export async function PATCH({ cookies, url, request }) {
         if (isValidEmail(email)) data.email = email.toLowerCase();
         if (password) data.password = await hashPassword(password);
 
-        const query = await prisma.users.update({
-            where: { id: decoded_token?.id },
-            data,
-        });
+        const result = await Users
+            .findByIdAndUpdate(
+                decoded_token?.id,
+                data, { returnDocument: 'after' },
+            );
 
         return json({
             application: VITE_APP_NAME,
             message: 'Update user account success.',
-            data: query,
+            data: result,
         });
     } catch (e) {
         console.error(e);
@@ -134,18 +135,16 @@ export async function PUT({ request }) {
     }
 
     try {
-        const query = await prisma.users.create({
-            data: {
-                name: trimText(name),
-                email: email.toLowerCase(),
-                password: await hashPassword(password),
-            },
+        const result = await Users.create({
+            name: trimText(name),
+            email: email.toLowerCase(),
+            password: await hashPassword(password),
         });
 
         return json({
             application: VITE_APP_NAME,
             message: 'Register new account success.',
-            data: query,
+            data: result,
         });
     } catch (e) {
         console.error(e);

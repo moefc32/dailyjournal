@@ -1,6 +1,6 @@
 import { VITE_PAGINATION_ITEMS } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
-import prisma from '$lib/server/prisma';
+import Journals from '$lib/server/db/model/journals';
 
 const PAGINATION_ITEMS =
     parseInt(VITE_PAGINATION_ITEMS, 10) || 10;
@@ -15,36 +15,26 @@ export async function load({ parent, url }) {
     if (!userData) return;
 
     const [getRow, total] = await Promise.all([
-        prisma.journals.findMany({
-            where: { user_id: userData.id },
-            orderBy: { created_at: 'desc' },
-            skip,
-            take: PAGINATION_ITEMS,
-            select: {
-                id: true,
-                title: true,
-                created_at: true,
-                documentations: {
-                    select: { id: true },
-                    orderBy: { order: 'asc' },
-                    take: 1,
-                },
-            },
-        }),
-        prisma.journals.count({
-            where: { user_id: userData.id },
-        }),
+        Journals.find({ user_id: userData._id })
+            .select('title created_at')
+            .slice('documentations', 1)
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean(),
+        Journals.countDocuments({ user_id: userData._id }),
     ]);
 
-    const row = getRow.map(item => ({
+    const row = getRow.map(({ _id, documentations, ...item }) => ({
         ...item,
-        id: item.id,
+        _id: _id.toString(),
+        thumb: documentations[0],
     }));
 
     return {
         pageTitle: '',
         userData,
         page,
-        contents: userData ? { row, total } : undefined,
+        contents: { row, total },
     };
 }

@@ -1,4 +1,4 @@
-import prisma from '$lib/server/prisma';
+import Journals from '$lib/server/db/model/journals';
 
 export async function load({ params, parent, url }) {
     const pageTitle = '';
@@ -6,20 +6,10 @@ export async function load({ params, parent, url }) {
     const { id } = params;
     const edit = url.searchParams.has('edit');
 
-    const contents = await prisma.journals.findUnique({
-        where: { id },
-        include: {
-            documentations: {
-                select: { id: true },
-                orderBy: { order: 'asc' },
-            },
-        },
-    });
-
-    if (Array.isArray(contents?.documentations)) {
-        contents.documentations =
-            contents.documentations.map((item) => item.id);
-    }
+    const contents = await Journals.findOne({
+        _id: id,
+        user_id: userData._id,
+    }).lean();
 
     if (!contents) {
         return {
@@ -34,8 +24,8 @@ export async function load({ params, parent, url }) {
         edit_mode: edit,
         contents: {
             ...contents,
-            id: contents?.id,
-            uploaded: contents?.documentations,
+            _id: contents._id.toString(),
+            uploaded: contents.documentations,
             deleted: [],
             files: [],
             loading: false,
