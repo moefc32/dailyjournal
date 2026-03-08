@@ -22,8 +22,8 @@ export async function GET({ cookies, params }) {
             status: 200,
             headers: {
                 'Content-Type': contentType,
-                'Content-Length': buffer.length,
-                'Cache-Control': `public, max-age=3600`,
+                'Content-Length': buffer.length.toString(),
+                'Cache-Control': 'private, max-age=60, must-revalidate',
             },
         });
     } catch (e) {

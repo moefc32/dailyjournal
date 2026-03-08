@@ -46,7 +46,7 @@ export async function fetchMinio(path) {
         return {
             stream,
             contentType:
-                stat.metaData['content-type']
+                stat.metaData['Content-Type']
                 || 'application/octet-stream',
         };
     } catch (e) {
