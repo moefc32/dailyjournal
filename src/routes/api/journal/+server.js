@@ -4,7 +4,7 @@ import {
     VITE_PAGINATION_ITEMS,
 } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import mongoose from 'mongoose';
+import { Types as mongoTypes } from 'mongoose';
 import sharp from 'sharp';
 import {
     uploadMinio,
@@ -101,7 +101,7 @@ export async function POST({ cookies, request }) {
 
     try {
         const documentationIds = files
-            .map(() => new mongoose.Types.ObjectId().toString());
+            .map(() => new mongoTypes.ObjectId().toString());
 
         await Promise.all(
             files.map(async (file, i) => {
@@ -181,7 +181,7 @@ export async function PATCH({ request, url }) {
         data.updated_at = new Date();
 
         const newFileIds =
-            files.map(() => new mongoose.Types.ObjectId().toString());
+            files.map(() => new mongoTypes.ObjectId().toString());
 
         await Promise.all([
             // Cleanup Minio for deleted files

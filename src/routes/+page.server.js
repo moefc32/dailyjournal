@@ -1,5 +1,4 @@
 import { VITE_PAGINATION_ITEMS } from '$env/static/private';
-import { redirect } from '@sveltejs/kit';
 import Journals from '$lib/server/db/model/journals';
 
 const PAGINATION_ITEMS =

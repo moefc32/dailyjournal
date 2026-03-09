@@ -58,60 +58,52 @@
         {/if}
     </div>
     <div class="card flex flex-col gap-6 px-6 py-9 bg-white w-full shadow-xl">
-        {#if !contents}
+        <div class="flex flex-col gap-3">
+            <p class="text-2xl font-semibold">
+                {contents.title}
+            </p>
+            <p class="flex items-center gap-1 text-gray-500 text-sm">
+                <Calendar size={12} />
+                Published on {datePrettier(contents.created_at, {
+                    date: true,
+                    time: true,
+                })}
+            </p>
+        </div>
+        {#if contents.documentations?.length}
             <div
-                class="flex flex-col justify-end items-center bg-[url('/not-found.svg')] bg-top bg-no-repeat bg-[length:180px] text-gray-700 text-xl h-[200px]"
+                class="flex gap-3 overflow-x-auto"
+                bind:this={scrollContainer}
+                on:wheel={handleScroll}
             >
-                Requested journal is not found
+                {#each contents.documentations as file, i}
+                    <div
+                        role="button"
+                        class="block bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
+                        title={`Image attachment ${i + 1}`}
+                        on:click={() => {
+                            previewImage = `/file/${file}`;
+                            image_preview.showModal();
+                        }}
+                    >
+                        <img
+                            src={`/file/${file}`}
+                            class="object-cover w-full h-full"
+                        />
+                    </div>
+                {/each}
             </div>
-        {:else}
-            <div class="flex flex-col gap-3">
-                <p class="text-2xl font-semibold">
-                    {contents.title}
-                </p>
-                <p class="flex items-center gap-1 text-gray-500 text-sm">
-                    <Calendar size={12} />
-                    Published on {datePrettier(contents.created_at, {
-                        date: true,
-                        time: true,
-                    })}
-                </p>
-            </div>
-            {#if contents.documentations?.length}
-                <div
-                    class="flex gap-3 overflow-x-auto"
-                    bind:this={scrollContainer}
-                    on:wheel={handleScroll}
-                >
-                    {#each contents.documentations as file, i}
-                        <div
-                            role="button"
-                            class="block bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
-                            title={`Image attachment ${i + 1}`}
-                            on:click={() => {
-                                previewImage = `/file/${file}`;
-                                image_preview.showModal();
-                            }}
-                        >
-                            <img
-                                src={`/file/${file}`}
-                                class="object-cover w-full h-full"
-                            />
-                        </div>
-                    {/each}
-                </div>
-                <hr class="mt-3 mb-0 bg-gray-400 h-[1px] border-0" />
-            {/if}
-            <p>{contents.content}</p>
-            {#if contents.created_at.toString() !== contents.updated_at.toString()}
-                <p class="flex items-center gap-1 text-gray-500 text-sm">
-                    <Pen size={12} />
-                    Updated on {datePrettier(contents.updated_at, {
-                        date: true,
-                        time: true,
-                    })}
-                </p>
-            {/if}
+            <hr class="mt-3 mb-0 bg-gray-400 h-[1px] border-0" />
+        {/if}
+        <p>{contents.content}</p>
+        {#if contents.created_at.toString() !== contents.updated_at.toString()}
+            <p class="flex items-center gap-1 text-gray-500 text-sm">
+                <Pen size={12} />
+                Updated on {datePrettier(contents.updated_at, {
+                    date: true,
+                    time: true,
+                })}
+            </p>
         {/if}
     </div>
 </div>
