@@ -1,11 +1,16 @@
+<div align="center">
+<img src="./static/favicon.svg" width="80"/>
+
 # DailyJournal
+
+**DailyJournal work activity and documentation journaling system**
+
 <a href="https://opensource.org/license/mit"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" height="24" /></a>
 <a href="https://pnpm.io/"><img src="https://img.shields.io/badge/Package-PNPM-orange?style=flat-square" height="24" /></a>
 <img src="https://img.shields.io/badge/Module-ECMAScript-yellow?style=flat-square" height="24" />
+</div>
 
-DailyJournal work activity and documentation journaling system
-
-![image](https://github.com/user-attachments/assets/727d6701-ce13-41d5-acfa-da519f252c51)
+![Preview](https://github.com/user-attachments/assets/036426dc-9410-4562-9a02-cf63fbab3c2e)
 
 ## Features
 - Create, search, update, and delete journal entry
@@ -13,11 +18,9 @@ DailyJournal work activity and documentation journaling system
 - Image resize and compression to WebP to maximize the performance
 
 ## Stack Used
-- [SvelteKit](https://svelte.dev/)
-- [Tailwind](https://tailwindcss.com/)
-- [daisyUI](https://daisyui.com/)
-- [MySQL](https://www.mysql.com/)
-- [Prisma ORM](https://www.prisma.io/orm)
+- Monolithic [SvelteKit](https://svelte.dev/)
+- [Tailwind](https://tailwindcss.com/) with [daisyUI](https://daisyui.com/)
+- [MongoDB](https://www.mongodb.com/) with [Mongoose ODM](https://mongoosejs.com/)
 - [MinIO](https://min.io/)
 
 ## Local Preview
