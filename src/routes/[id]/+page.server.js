@@ -15,7 +15,7 @@ export async function load({ params, parent, url }) {
         }).select('-user_id').lean()
         : null;
 
-    if (!contents) throw error(404, 'Not Found');
+    if (!contents) throw error(404);
 
     return {
         pageTitle: edit ? 'Edit Journal' : contents.title,

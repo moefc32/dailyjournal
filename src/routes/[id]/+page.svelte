@@ -35,7 +35,6 @@
                 })
                 .json();
             contents = { ...result.data };
-            console.log({ data: result.data });
 
             notyf.success('Journal saved successfully.');
             await goto(`/${contents._id}`, { invalidateAll: true });

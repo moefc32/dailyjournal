@@ -13,7 +13,6 @@
     let fileInput;
     let dragging = false;
     let previewImage = '';
-    let isLoading = false;
     let scrollContainer;
 
     function handleScroll(event) {
@@ -252,10 +251,10 @@
                         contents.deleted,
                         contents.files,
                     );
-                    isLoading = true;
+                    contents.loading = true;
                 }}
             >
-                {#if contents.loading && isLoading}
+                {#if contents.loading}
                     <span class="loading loading-spinner loading-xs"></span>
                     Loading...
                 {:else}
