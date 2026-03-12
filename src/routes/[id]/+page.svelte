@@ -1,8 +1,8 @@
 <script>
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
 
     import EditorEdit from '$lib/component/EditorEdit.svelte';
     import Summary from '$lib/component/Summary.svelte';
@@ -36,11 +36,11 @@
                 .json();
             contents = { ...result.data };
 
-            notyf.success('Journal saved successfully.');
+            toast.success('Journal saved successfully.');
             await goto(`/${contents._id}`, { invalidateAll: true });
         } catch (e) {
             console.error(e);
-            notyf.error('Save contents failed, please try again!');
+            toast.error('Save contents failed, please try again!');
         }
 
         contents.loading = false;
@@ -54,13 +54,13 @@
                 searchParams: { id },
             });
 
-            notyf.success('Journal deleted successfully.');
+            toast.success('Journal deleted successfully.');
             await goto('/', { invalidateAll: true });
         } catch (e) {
             contents.loading = false;
 
             console.error(e);
-            notyf.error('Delete journal failed, please try again!');
+            toast.error('Delete journal failed, please try again!');
         }
     }
 </script>

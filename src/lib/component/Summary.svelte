@@ -2,7 +2,6 @@
     import { goto } from '$app/navigation';
     import { ArrowLeft, Pen, Trash2, Calendar } from 'lucide-svelte';
     import datePrettier from '$lib/datePrettier';
-    import notyf from '$lib/notyf';
 
     export let contents;
     export let deleteJournal;

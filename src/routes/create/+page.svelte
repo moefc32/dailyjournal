@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
-    import notyf from '$lib/notyf';
 
     import EditorCreate from '$lib/component/EditorCreate.svelte';
 
@@ -29,13 +29,13 @@
                 })
                 .json();
 
-            notyf.success('Journal created successfully.');
+            toast.success('Journal created successfully.');
             await goto(`/${result.data}`, { invalidateAll: true });
         } catch (e) {
             journal.loading = false;
 
             console.error(e);
-            notyf.error('Create journal failed, please try again!');
+            toast.error('Create journal failed, please try again!');
         }
     }
 </script>
