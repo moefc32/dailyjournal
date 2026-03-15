@@ -18,8 +18,6 @@ export default model(
             required: true,
         },
         documentations: [String],
-        created_at: Date,
-        updated_at: Date,
     }, {
         versionKey: false,
         timestamps: {

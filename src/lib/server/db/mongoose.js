@@ -4,8 +4,6 @@ import Users from './model/users'
 
 const { connect, connection } = mongoose;
 
-let shuttingDown = false;
-
 async function shutdown() {
     await connection.close();
     process.exit(0);
