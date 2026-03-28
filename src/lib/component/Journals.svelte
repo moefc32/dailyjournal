@@ -104,7 +104,7 @@
             <div
                 class="{search.keyword
                     ? `bg-[url('/no-result.svg')]`
-                    : `bg-[url('/no-data.svg')]`} flex flex-col justify-end items-center bg-top bg-no-repeat bg-[length:180px] text-gray-700 text-xl h-[135px]"
+                    : `bg-[url('/no-data.svg')]`} flex flex-col justify-end items-center bg-top bg-no-repeat bg-[length:180px] text-gray-700 text-xl h-32"
             >
                 {#if search.keyword}
                     <span>No journal found</span>

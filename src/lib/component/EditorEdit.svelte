@@ -177,7 +177,7 @@
                         }}
                     >
                         <button
-                            class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-none rounded-full cursor-pointer top-1 right-1 shadow"
+                            class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-0 rounded-full cursor-pointer top-1 right-1 shadow"
                             on:click={e => {
                                 e.stopPropagation();
                                 deleteUploadedImage(file);
@@ -193,9 +193,7 @@
                     </div>
                 {/each}
                 {#if contents.uploaded.length && contents.files.length}
-                    <div
-                        class="flex-1 my-3 bg-gray-400 w-[1px] min-w-[1px] max-w-[1px]"
-                    ></div>
+                    <div class="my-3 bg-gray-400 w-px shrink-0"></div>
                 {/if}
                 {#each contents.files as file, i}
                     <div
@@ -208,7 +206,7 @@
                         }}
                     >
                         <button
-                            class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-none rounded-full cursor-pointer top-1 right-1 shadow"
+                            class="absolute flex justify-center items-center bg-red-500 text-white text-xs w-5 h-5 border-0 rounded-full cursor-pointer top-1 right-1 shadow"
                             on:click={e => {
                                 e.stopPropagation();
                                 removeFile(i);
@@ -271,7 +269,7 @@
     <form method="dialog">
         <button class="w-screen h-screen">
             <div
-                class="modal-box flex justify-center items-center p-0 bg-transparent shadow-none w-screen h-screen"
+                class="modal-box flex justify-center items-center p-6 bg-transparent shadow-none w-screen h-screen"
             >
                 <img
                     src={previewImage}

@@ -21,7 +21,8 @@ export async function load({ parent, url }) {
             .skip(skip)
             .limit(limit)
             .lean(),
-        Journals.countDocuments({ user_id: userData._id }),
+
+        Journals.countDocuments({ user_id: userData._id })
     ]);
 
     const row = getRow.map(({ _id, documentations, ...item }) => ({

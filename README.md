@@ -33,11 +33,7 @@
    ```sh
    pnpm i
    ```
-4. Generate the Prisma client for database connection
-   ```sh
-   npx prisma generate
-   ```
-5. Run the application in development mode
+4. Run the application in development mode
    ```sh
    pnpm run dev
    ```
@@ -52,15 +48,11 @@
    ```sh
    pnpm i
    ```
-4. Generate the Prisma client for database connection
-   ```sh
-   npx prisma generate
-   ```
-5. Optimize the application for production
+4. Optimize the application for production
    ```sh
    pnpm run build
    ```
-6. Serve the application using PM2
+5. Serve the application using PM2
    ```sh
    pm2 start ecosystem.config.cjs
    ```

@@ -48,6 +48,7 @@ export async function GET({ cookies, url }) {
                 .skip(skip)
                 .limit(PAGINATION_ITEMS)
                 .lean(),
+
             Journals.countDocuments({
                 user_id: decoded_token?.id,
                 ...(search ? {
@@ -56,7 +57,7 @@ export async function GET({ cookies, url }) {
                         $options: 'i',
                     }
                 } : {})
-            }),
+            })
         ]);
 
         const row = getRow.map((item) => ({

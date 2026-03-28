@@ -92,7 +92,7 @@
                     </div>
                 {/each}
             </div>
-            <hr class="mt-3 mb-0 bg-gray-400 h-[1px] border-0" />
+            <hr class="mt-3 mb-0 bg-gray-400 h-px border-0" />
         {/if}
         <p>{contents.content}</p>
         {#if contents.created_at.toString() !== contents.updated_at.toString()}
@@ -113,7 +113,7 @@
     <form method="dialog">
         <button class="w-screen h-screen">
             <div
-                class="modal-box flex justify-center items-center p-0 bg-transparent shadow-none w-screen h-screen"
+                class="modal-box flex justify-center items-center p-6 bg-transparent shadow-none w-screen h-screen"
             >
                 <img
                     src={previewImage}
