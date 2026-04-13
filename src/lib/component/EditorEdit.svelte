@@ -50,15 +50,12 @@
         let selectedFiles = Array.from(event.target.files);
 
         if (
-            contents.uploaded.length +
-                contents.files.length +
-                selectedFiles.length >
+            uploaded.length + contents.files.length + selectedFiles.length >
             IMAGE_UPLOAD_LIMIT
         ) {
             selectedFiles = selectedFiles.slice(
                 0,
-                IMAGE_UPLOAD_LIMIT -
-                    (contents.uploaded.length + contents.files.length),
+                IMAGE_UPLOAD_LIMIT - (uploaded.length + contents.files.length),
             );
         }
 
@@ -66,10 +63,7 @@
     }
 
     function deleteUploadedImage(file) {
-        const filtered = contents.uploaded.filter(item => item !== file);
-
         contents.deleted = [...contents.deleted, file];
-        contents.uploaded = filtered;
     }
 
     function processFiles(newFiles) {
@@ -93,6 +87,10 @@
         document.addEventListener('dragover', preventDefaults);
         document.addEventListener('drop', preventDefaults);
     });
+
+    $: uploaded = contents.uploaded.filter(
+        item => !contents.deleted.includes(item),
+    );
 </script>
 
 <!-- svelte-ignore a11y_interactive_supports_focus -->
@@ -113,6 +111,12 @@
                 href={contents._id}
                 class="btn btn-sm me-auto {contents.loading && 'btn-disabled'}"
                 title="Cancel edit and back to journal detail"
+                on:click={() => {
+                    contents.deleted = [];
+                    contents.files = [];
+
+                    contents = { ...contents };
+                }}
             >
                 <ArrowLeft size={16} /> Cancel Edit
             </a>
@@ -143,7 +147,7 @@
                 })}
             </div>
         </div>
-        {#if contents.uploaded.length + contents.files.length < IMAGE_UPLOAD_LIMIT}
+        {#if uploaded.length + contents.files.length < IMAGE_UPLOAD_LIMIT}
             <button
                 class="card block p-9 {dragging &&
                     'bg-gray-100'} text-center border-2 border-dashed border-gray-300 hover:border-gray-500 transition duration-300 ease-in-out cursor-pointer"
@@ -160,13 +164,13 @@
                 {/if}
             </button>
         {/if}
-        {#if contents.uploaded.length || contents.files.length}
+        {#if uploaded.length || contents.files.length}
             <div
                 class="flex gap-3 overflow-x-auto"
                 bind:this={scrollContainer}
                 on:wheel={handleScroll}
             >
-                {#each contents.uploaded as file, i}
+                {#each uploaded as file, i}
                     <div
                         role="button"
                         class="relative bg-gray-200 w-24 min-w-24 aspect-5/4 border-1 border-gray-300 rounded-lg shadow-sm overflow-hidden cursor-pointer"
@@ -192,7 +196,7 @@
                         />
                     </div>
                 {/each}
-                {#if contents.uploaded.length && contents.files.length}
+                {#if uploaded.length && contents.files.length}
                     <div class="my-3 bg-gray-400 w-px shrink-0"></div>
                 {/if}
                 {#each contents.files as file, i}
@@ -244,11 +248,7 @@
                     !contents.content ||
                     contents.loading}
                 on:click={() => {
-                    saveJournal(
-                        contents.uploaded,
-                        contents.deleted,
-                        contents.files,
-                    );
+                    saveJournal(uploaded, contents.deleted, contents.files);
                     contents.loading = true;
                 }}
             >

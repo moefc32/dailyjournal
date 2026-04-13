@@ -18,6 +18,7 @@
             const formData = new FormData();
             formData.append('title', contents.title);
             formData.append('content', contents.content);
+
             uploaded.forEach(image => {
                 formData.append(`documentations[]`, image);
             });
@@ -28,13 +29,18 @@
                 formData.append(`files[]`, file);
             });
 
-            const result = await ky
+            const { data } = await ky
                 .patch(`/api/journal`, {
                     searchParams: { id: contents._id },
                     body: formData,
                 })
                 .json();
-            contents = { ...result.data };
+
+            contents = {
+                ...data,
+                deleted: [],
+                files: [],
+            };
 
             toast.success('Journal saved successfully.');
             await goto(`/${contents._id}`, { invalidateAll: true });

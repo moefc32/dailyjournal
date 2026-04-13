@@ -98,7 +98,8 @@ export async function PATCH({ cookies, url, request }) {
         const result = await Users
             .findByIdAndUpdate(
                 decoded_token?.id,
-                data, { returnDocument: 'after' },
+                data,
+                { returnDocument: 'after' },
             );
 
         return json({

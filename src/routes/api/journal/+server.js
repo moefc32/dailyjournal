@@ -226,7 +226,7 @@ export async function PATCH({ request, url }) {
         const contents = await Journals.findByIdAndUpdate(
             id,
             { $set: data },
-            { new: true, lean: true }
+            { lean: true, returnDocument: 'after' }
         );
 
         return json({
