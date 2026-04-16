@@ -7,11 +7,10 @@ export default model(
             type: String,
             required: true,
         },
-        user_id: {
+        userId: {
             type: Schema.Types.ObjectId,
             ref: 'Users',
             required: true,
-            index: true,
         },
         content: {
             type: String,
@@ -21,8 +20,9 @@ export default model(
     }, {
         versionKey: false,
         timestamps: {
-            createdAt: 'created_at',
-            updatedAt: 'updated_at',
+            createdAt: true,
+            updatedAt: true,
         },
     })
+        .index({ userId: 1, createdAt: -1 })
 );

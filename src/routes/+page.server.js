@@ -14,15 +14,15 @@ export async function load({ parent, url }) {
     if (!userData) return;
 
     const [getRow, total] = await Promise.all([
-        Journals.find({ user_id: userData._id })
-            .select('title created_at')
+        Journals.find({ userId: userData._id })
+            .select('title createdAt')
             .slice('documentations', 1)
-            .sort({ created_at: -1 })
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .lean(),
 
-        Journals.countDocuments({ user_id: userData._id })
+        Journals.countDocuments({ userId: userData._id })
     ]);
 
     const row = getRow.map(({ _id, documentations, ...item }) => ({

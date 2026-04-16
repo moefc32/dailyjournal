@@ -34,7 +34,7 @@ export async function GET({ cookies, url }) {
     try {
         const [getRow, total] = await Promise.all([
             Journals.find({
-                user_id: decoded_token?.id,
+                userId: decoded_token?.id,
                 ...(search ? {
                     title: {
                         $regex: search,
@@ -42,15 +42,15 @@ export async function GET({ cookies, url }) {
                     }
                 } : {})
             })
-                .select('title created_at')
+                .select('title createdAt')
                 .slice('documentations', 1)
-                .sort({ created_at: -1 })
+                .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(PAGINATION_ITEMS)
                 .lean(),
 
             Journals.countDocuments({
-                user_id: decoded_token?.id,
+                userId: decoded_token?.id,
                 ...(search ? {
                     title: {
                         $regex: search,
@@ -145,7 +145,7 @@ export async function POST({ cookies, request }) {
         const query = await Journals.create({
             title,
             content,
-            user_id: decoded_token?.id,
+            userId: decoded_token?.id,
             documentations: documentationIds,
         });
 
@@ -179,7 +179,7 @@ export async function PATCH({ request, url }) {
         const data = {};
         if (title) data.title = title;
         if (content) data.content = content;
-        data.updated_at = new Date();
+        data.updatedAt = new Date();
 
         const newFileIds =
             files.map(() => new mongoTypes.ObjectId().toString());

@@ -11,8 +11,8 @@ export async function load({ params, parent, url }) {
     const contents = mongoTypes.ObjectId.isValid(id)
         ? await Journals.findOne({
             _id: id,
-            user_id: userData._id,
-        }).select('-user_id').lean()
+            userId: userData._id,
+        }).select('-userId').lean()
         : null;
 
     if (!contents) throw error(404);
