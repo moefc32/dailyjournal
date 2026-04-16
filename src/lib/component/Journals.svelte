@@ -133,7 +133,7 @@
                     </p>
                     <p class="flex items-center gap-1 text-gray-500 text-sm">
                         <Calendar size={12} />
-                        {datePrettier(item.created_at, {
+                        {datePrettier(item.createdAt, {
                             date: true,
                             time: true,
                         })}
