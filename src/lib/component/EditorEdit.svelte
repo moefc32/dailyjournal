@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { ArrowLeft, Trash2, Calendar, X, Check } from 'lucide-svelte';
+    import { ArrowLeft, Trash2, Calendar, X, Check } from '@lucide/svelte';
     import datePrettier from '$lib/datePrettier';
 
     export let contents;

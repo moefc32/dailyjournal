@@ -1,5 +1,5 @@
 <script>
-    import { Plus, Search, Calendar } from 'lucide-svelte';
+    import { Plus, Search, Calendar } from '@lucide/svelte';
     import ky from 'ky';
     import datePrettier from '$lib/datePrettier';
     import trimText from '$lib/trimText';

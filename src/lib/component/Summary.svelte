@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { ArrowLeft, Pen, Trash2, Calendar } from 'lucide-svelte';
+    import { ArrowLeft, Pen, Trash2, Calendar } from '@lucide/svelte';
     import datePrettier from '$lib/datePrettier';
 
     export let contents;
